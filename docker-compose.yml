@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: storage_postgres
+    environment:
+      POSTGRES_DB: storagedb
+      POSTGRES_USER: storageuser
+      POSTGRES_PASSWORD: storagepass
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U storageuser -d storagedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+      postgres_data:
+
