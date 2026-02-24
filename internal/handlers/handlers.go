@@ -7,6 +7,8 @@ import (
 	"storeSystem/internal/models"
 	"strconv"
 	"strings"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type Handlers struct {
@@ -40,8 +42,7 @@ func (h *Handlers) GetAllItems(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) GetItemByID(w http.ResponseWriter, r *http.Request) {
-	pathParts := strings.Split(strings.TrimPrefix(r.URL.Path, "/items/"), "/")
-	idStr := pathParts[0]
+	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
 
 	if err != nil {
@@ -51,6 +52,7 @@ func (h *Handlers) GetItemByID(w http.ResponseWriter, r *http.Request) {
 	item, err := h.store.GetByID(id)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
 	}
 	respondWithJSON(w, http.StatusOK, item)
 }
