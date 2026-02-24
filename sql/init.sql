@@ -73,7 +73,6 @@ CREATE TABLE worker
 CREATE TABLE delivery
 (
     delivery_id        SERIAL PRIMARY KEY,
-    delivery_number    BIGINT NOT NULL,
     status             TEXT   NOT NULL,
     planned_arrival_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     accepted_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -265,12 +264,12 @@ VALUES ('Supplier One LLC', 'LLC', 'Address 1', 'Bank 1', '111111111',
 -- =========================
 
 INSERT INTO delivery
-    (delivery_number, status, created_by, accepted_by)
-VALUES (1001, 'NEW', 1, 2),
-       (1002, 'NEW', 1, 2),
-       (1003, 'IN_PROGRESS', 2, 3),
-       (1004, 'COMPLETED', 3, 2),
-       (1005, 'NEW', 1, 2) ON CONFLICT DO NOTHING;
+    (status, created_by, accepted_by)
+VALUES ('NEW', 1, 2),
+       ('NEW', 1, 2),
+       ('IN_PROGRESS', 2, 3),
+       ('COMPLETED', 3, 2),
+       ('NEW', 1, 2) ON CONFLICT DO NOTHING;
 
 
 -- =========================

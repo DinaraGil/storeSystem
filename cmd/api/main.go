@@ -32,8 +32,9 @@ func main() {
 
 	itemStore := database.NewItemStore(db)
 	workerStore := database.NewWorkerStore(db)
-	deliveryStore := database.NewDeliveryListStore(db)
-	handler := handlers.NewHandlers(itemStore, workerStore, deliveryStore)
+	deliveryListStore := database.NewDeliveryListStore(db)
+	deliveryStore := database.NewDeliveryStore(db)
+	handler := handlers.NewHandlers(itemStore, workerStore, deliveryListStore, deliveryStore)
 
 	router := chi.NewRouter()
 
@@ -52,6 +53,13 @@ func main() {
 		r.Get("/", handler.GetAllDeliveryLists)
 		r.Post("/", handler.CreateDeliveryList)
 		r.Get("/{id}", handler.GetDeliveryListByID)
+	})
+
+	router.Route("/deliveries", func(r chi.Router) {
+		r.Get("/", handler.GetAllDeliveries)
+		r.Post("/", handler.CreateDelivery)
+		r.Get("/{id}", handler.GetDeliveryByID)
+		r.Put("/{id}", handler.UpdateDelivery)
 	})
 
 	router.Route("/workers", func(r chi.Router) {

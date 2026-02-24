@@ -59,8 +59,7 @@ func (h *Handlers) CreateItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) UpdateItem(w http.ResponseWriter, r *http.Request) {
-	pathParts := strings.Split(strings.TrimPrefix(r.URL.Path, "/items/"), "/")
-	idStr := pathParts[0]
+	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
 
 	if err != nil {
