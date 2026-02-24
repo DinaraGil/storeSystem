@@ -22,7 +22,7 @@ func (s *ItemStore) GetAll() ([]models.Item, error) {
 	query := `SELECT * FROM item order by created_at desc;`
 
 	err := s.db.Select(&items, query)
-	fmt.Println(items, err)
+
 	if err != nil {
 		return nil, err
 	}

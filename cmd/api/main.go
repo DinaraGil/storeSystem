@@ -31,7 +31,8 @@ func main() {
 	log.Println("успешно подключено к бд")
 
 	itemStore := database.NewItemStore(db)
-	handler := handlers.NewHandlers(itemStore)
+	workerStore := database.NewWorkerStore(db)
+	handler := handlers.NewHandlers(itemStore, workerStore)
 
 	router := chi.NewRouter()
 
@@ -46,6 +47,12 @@ func main() {
 		r.Put("/{id}", handler.UpdateItem)  // PUT /items/1
 	})
 
+	router.Route("/workers", func(r chi.Router) {
+		r.Post("/", handler.CreateWorker) // POST /workers
+	})
+	
+	router.Post("/auth/login", handler.Login)
+
 	//cors middleware
 
 	serverAddr := ":" + serverPort
@@ -54,33 +61,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func methodHandler(handlerFunc http.HandlerFunc, allowedMethod string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != allowedMethod {
-			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-			return
-		}
-		handlerFunc(w, r)
-	}
-}
-
-func itemIDHandler(handler *handlers.Handlers) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			handler.GetItemByID(w, r)
-		case http.MethodPut:
-			handler.UpdateItem(w, r)
-		default:
-			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		}
-	}
-}
-func loggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s%s %s", r.Method, r.URL.Path, r.RemoteAddr)
-		next.ServeHTTP(w, r)
-	})
 }

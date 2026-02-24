@@ -12,12 +12,17 @@ import (
 )
 
 type Handlers struct {
-	store *database.ItemStore
+	itemStore   *database.ItemStore
+	workerStore *database.WorkerStore
 }
 
-func NewHandlers(store *database.ItemStore) *Handlers {
+func NewHandlers(
+	itemStore *database.ItemStore,
+	workerStore *database.WorkerStore,
+) *Handlers {
 	return &Handlers{
-		store: store,
+		itemStore:   itemStore,
+		workerStore: workerStore,
 	}
 }
 
@@ -32,7 +37,7 @@ func respondWithError(w http.ResponseWriter, statusCode int, message string) {
 }
 
 func (h *Handlers) GetAllItems(w http.ResponseWriter, r *http.Request) {
-	items, err := h.store.GetAll()
+	items, err := h.itemStore.GetAll()
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Ошибка получения товаров")
@@ -49,7 +54,7 @@ func (h *Handlers) GetItemByID(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Некорректный id товара")
 		return
 	}
-	item, err := h.store.GetByID(id)
+	item, err := h.itemStore.GetByID(id)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
@@ -70,7 +75,7 @@ func (h *Handlers) CreateItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	item, err := h.store.Create(input)
+	item, err := h.itemStore.Create(input)
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -100,7 +105,7 @@ func (h *Handlers) UpdateItem(w http.ResponseWriter, r *http.Request) {
 	if input.Article != nil && strings.TrimSpace(*input.Article) == "" {
 		respondWithError(w, http.StatusBadRequest, "Заголовок обязательный")
 	}
-	item, err := h.store.Update(id, input)
+	item, err := h.itemStore.Update(id, input)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "record not found") {
