@@ -32,7 +32,8 @@ func main() {
 
 	itemStore := database.NewItemStore(db)
 	workerStore := database.NewWorkerStore(db)
-	handler := handlers.NewHandlers(itemStore, workerStore)
+	deliveryStore := database.NewDeliveryListStore(db)
+	handler := handlers.NewHandlers(itemStore, workerStore, deliveryStore)
 
 	router := chi.NewRouter()
 
@@ -47,10 +48,16 @@ func main() {
 		r.Put("/{id}", handler.UpdateItem)  // PUT /items/1
 	})
 
+	router.Route("/delivery_lists", func(r chi.Router) {
+		r.Get("/", handler.GetAllDeliveryLists)
+		r.Post("/", handler.CreateDeliveryList)
+		r.Get("/{id}", handler.GetDeliveryListByID)
+	})
+
 	router.Route("/workers", func(r chi.Router) {
 		r.Post("/", handler.CreateWorker) // POST /workers
 	})
-	
+
 	router.Post("/auth/login", handler.Login)
 
 	//cors middleware
