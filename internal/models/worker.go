@@ -9,8 +9,8 @@ type Worker struct {
 }
 
 type CreateWorkerInput struct {
-	FullName string `json:"full_name" db:"full_name"`
-	Username string `json:"username" db:"username"`
-	Password string `json:"password" db:"password"`
-	RoleId   int    `json:"role_id" db:"role_id"`
+	FullName string `json:"full_name" db:"full_name" validate:"required"`
+	Username string `json:"username" db:"username" validate:"required"`
+	Password string `json:"password" db:"password" validate:"required"`
+	RoleId   int    `json:"role_id" db:"role_id" validate:"required,min=1,max=2"`
 }

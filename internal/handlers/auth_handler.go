@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"storeSystem/internal/models"
-
 	"storeSystem/internal/auth"
+	"storeSystem/internal/models"
+	"storeSystem/internal/validation"
 )
 
 type LoginInput struct {
@@ -65,6 +65,18 @@ func (h *Handlers) CreateWorker(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 		respondWithError(w, http.StatusBadRequest, "bad request")
+		return
+	}
+
+	err := validation.Validate.Struct(input)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	_, err = h.workerStore.GetByUsername(input.Username)
+	if err == nil {
+		respondWithError(w, http.StatusConflict, "user with this username already exists")
 		return
 	}
 
