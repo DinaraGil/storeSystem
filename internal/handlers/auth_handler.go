@@ -18,13 +18,13 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	var input LoginInput
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		http.Error(w, "bad request", http.StatusBadRequest)
+		respondWithError(w, http.StatusBadRequest, "неправильные поля")
 		return
 	}
 
 	worker, err := h.workerStore.GetByUsername(input.Username)
 	if err != nil {
-		http.Error(w, "unauthorized getbyusername", http.StatusUnauthorized)
+		respondWithError(w, http.StatusUnauthorized, "Имя пользователя не найдено")
 		return
 	}
 
@@ -34,7 +34,7 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(input.Password)
 
 	if err != nil {
-		http.Error(w, "unauthorized passwordhash", http.StatusUnauthorized)
+		respondWithError(w, http.StatusUnauthorized, "Неправильное имя пользователя или пароль")
 		return
 	}
 
@@ -51,7 +51,7 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 
 	token, err := auth.GenerateToken(worker.ID, role)
 	if err != nil {
-		http.Error(w, "internal error", http.StatusInternalServerError)
+		respondWithError(w, http.StatusInternalServerError, "internal error")
 		return
 	}
 
