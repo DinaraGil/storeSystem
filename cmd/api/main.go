@@ -34,7 +34,9 @@ func main() {
 	workerStore := database.NewWorkerStore(db)
 	deliveryListStore := database.NewDeliveryListStore(db)
 	deliveryStore := database.NewDeliveryStore(db)
-	handler := handlers.NewHandlers(itemStore, workerStore, deliveryListStore, deliveryStore)
+	counterpartyStore := database.NewCounterpartyStore(db)
+
+	handler := handlers.NewHandlers(itemStore, workerStore, deliveryListStore, deliveryStore, counterpartyStore)
 
 	router := chi.NewRouter()
 
@@ -68,6 +70,11 @@ func main() {
 
 	router.Post("/auth/login", handler.Login)
 
+	router.Route("/counterparties", func(r chi.Router) {
+		r.Get("/", handler.GetAllCounterparties)
+		r.Get("/{id}", handler.GetCounterpartyByID)
+		r.Post("/", handler.CreateCounterparty)
+	})
 	//cors middleware
 
 	serverAddr := ":" + serverPort

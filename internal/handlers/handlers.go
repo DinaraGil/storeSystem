@@ -11,6 +11,7 @@ type Handlers struct {
 	workerStore       *database.WorkerStore
 	deliveryListStore *database.DeliveryListStore
 	deliveryStore     *database.DeliveryStore
+	counterpartyStore *database.CounterpartyStore
 }
 
 func NewHandlers(
@@ -18,12 +19,14 @@ func NewHandlers(
 	workerStore *database.WorkerStore,
 	deliveryListStore *database.DeliveryListStore,
 	deliveryStore *database.DeliveryStore,
+	counterpartyStore *database.CounterpartyStore,
 ) *Handlers {
 	return &Handlers{
 		itemStore:         itemStore,
 		workerStore:       workerStore,
 		deliveryListStore: deliveryListStore,
 		deliveryStore:     deliveryStore,
+		counterpartyStore: counterpartyStore,
 	}
 }
 
