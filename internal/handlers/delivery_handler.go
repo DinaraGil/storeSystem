@@ -94,3 +94,20 @@ func (h *Handlers) UpdateDelivery(w http.ResponseWriter, r *http.Request) {
 	}
 	respondWithJSON(w, http.StatusOK, delivery)
 }
+
+func (h *Handlers) GetDeliveryListsByDeliveryID(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Некорректный id поставки")
+		return
+	}
+	lists, err := h.deliveryListStore.GetByDeliveryID(id)
+
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	respondWithJSON(w, http.StatusOK, lists)
+}

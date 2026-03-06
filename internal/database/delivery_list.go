@@ -44,6 +44,21 @@ func (s *DeliveryListStore) GetByID(id int) (*models.DeliveryList, error) {
 	return &delList, nil
 }
 
+func (s *DeliveryListStore) GetByDeliveryID(id int) ([]models.DeliveryList, error) {
+	var delLists []models.DeliveryList
+	query := `SELECT * FROM delivery_list where delivery_id=$1;`
+
+	err := s.db.Select(&delLists, query, id)
+
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("delList with delivery id %d not found", id)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return delLists, nil
+}
+
 func (s *DeliveryListStore) Create(input models.CreateDeliveryListInput) (*models.DeliveryList, error) {
 	var delList models.DeliveryList
 

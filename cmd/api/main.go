@@ -62,6 +62,8 @@ func main() {
 		r.Post("/", handler.CreateDelivery)
 		r.Get("/{id}", handler.GetDeliveryByID)
 		r.Put("/{id}", handler.UpdateDelivery)
+
+		r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
 	})
 
 	router.Route("/workers", func(r chi.Router) {

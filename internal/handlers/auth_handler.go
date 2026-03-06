@@ -55,9 +55,10 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]string{
+	json.NewEncoder(w).Encode(map[string]interface{}{
 		"username": worker.Username,
 		"token":    token,
+		"role_id":  worker.RoleId,
 	})
 }
 
