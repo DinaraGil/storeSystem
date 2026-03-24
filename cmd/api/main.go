@@ -55,6 +55,7 @@ func main() {
 		r.Get("/", handler.GetAllDeliveryLists)
 		r.Post("/", handler.CreateDeliveryList)
 		r.Get("/{id}", handler.GetDeliveryListByID)
+		r.Post("/upload", handler.UploadDeliveryList)
 	})
 
 	router.Route("/deliveries", func(r chi.Router) {
@@ -62,7 +63,6 @@ func main() {
 		r.Post("/", handler.CreateDelivery)
 		r.Get("/{id}", handler.GetDeliveryByID)
 		r.Put("/{id}", handler.UpdateDelivery)
-
 		r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
 	})
 

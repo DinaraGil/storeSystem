@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"bufio"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 	"storeSystem/internal/models"
 	"strconv"
@@ -56,4 +59,77 @@ func (h *Handlers) CreateDeliveryList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondWithJSON(w, http.StatusCreated, delList)
+}
+
+func (h *Handlers) AddFromFile(line string) (*models.DeliveryList, error) {
+	line = strings.TrimSpace(line)
+	if line == "" {
+		return nil, fmt.Errorf("пустая строка")
+	}
+
+	params := strings.Split(line, ",")
+	if len(params) < 4 {
+		return nil, fmt.Errorf("некорректная строка: %s", line)
+	}
+
+	var input models.CreateDeliveryListInput
+
+	input.DeliveryId, _ = strconv.Atoi(params[0])
+	input.SupplierId, _ = strconv.Atoi(params[1])
+	input.Article = params[2]
+	input.Amount, _ = strconv.Atoi(params[3])
+	input.CreatedBy = 1
+
+	delList, err := h.deliveryListStore.Create(input)
+
+	if err != nil {
+		return nil, err
+	}
+	return delList, nil
+}
+
+func (h *Handlers) UploadDeliveryList(w http.ResponseWriter, r *http.Request) {
+	file, handler, err := r.FormFile("file")
+	if err != nil {
+		fmt.Println("Ошибка получения файла:", err)
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	defer file.Close()
+
+	fmt.Printf("Загружен файл: %+v\n", handler.Filename)
+
+	reader := bufio.NewReader(file)
+	firstLine := true
+
+	var result []*models.DeliveryList
+
+	for {
+		line, err := reader.ReadString('\n')
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			respondWithError(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		if firstLine {
+			firstLine = false
+			continue
+		}
+
+		fmt.Printf("%s len line %d", line, len(line))
+
+		delList, err := h.AddFromFile(line)
+		if err != nil {
+			respondWithError(w, http.StatusBadRequest, err.Error())
+			return
+		}
+
+		result = append(result, delList)
+	}
+
+	respondWithJSON(w, http.StatusOK, result)
+
 }
