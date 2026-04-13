@@ -38,6 +38,8 @@ func main() {
 
 	handler := handlers.NewHandlers(itemStore, workerStore, deliveryListStore, deliveryStore, counterpartyStore)
 
+	go handler.ListenEvents(databaseURL)
+
 	router := chi.NewRouter()
 
 	router.Use(middleware.Logger)
@@ -70,7 +72,13 @@ func main() {
 		r.Post("/", handler.CreateWorker) // POST /workers
 	})
 
-	router.Post("/auth/login", handler.Login)
+	router.Route("/auth", func(r chi.Router) {
+		r.Post("/login", handler.Login)
+		r.Post("/logout", handler.Logout)
+		r.Get("/me", handler.Me)
+	})
+
+	router.Get("/ws/scan", handler.ScanSocket)
 
 	router.Route("/counterparties", func(r chi.Router) {
 		r.Get("/", handler.GetAllCounterparties)

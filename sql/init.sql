@@ -389,6 +389,31 @@ VALUES ('RFID001', 'ART-001', TRUE, NULL),
        ('RFID004', 'ART-004', TRUE, NULL),
        ('RFID005', 'ART-005', FALSE, NULL) ON CONFLICT DO NOTHING;
 
+-- =========================
+-- EVENT NOTIFY TRIGGER
+-- =========================
+
+CREATE OR REPLACE FUNCTION notify_event_insert() RETURNS trigger AS $$
+BEGIN
+  PERFORM pg_notify(
+    'event_channel',
+    json_build_object(
+      'event_id', NEW.event_id,
+      'rfid_id', NEW.rfid_id,
+      'article', NEW.article,
+      'is_in', NEW.is_in,
+      'error', NEW.error,
+      'created_at', NEW.created_at
+    )::text
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER event_insert_trigger
+AFTER INSERT ON event
+FOR EACH ROW
+EXECUTE FUNCTION notify_event_insert();
 
 -- =========================
 -- STATE

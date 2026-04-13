@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 	"storeSystem/internal/database"
+	"sync"
+
+	"github.com/gorilla/websocket"
 )
 
 type Handlers struct {
@@ -12,6 +15,8 @@ type Handlers struct {
 	deliveryListStore *database.DeliveryListStore
 	deliveryStore     *database.DeliveryStore
 	counterpartyStore *database.CounterpartyStore
+	scanClients       []*websocket.Conn
+	mu                sync.Mutex
 }
 
 func NewHandlers(
@@ -27,6 +32,7 @@ func NewHandlers(
 		deliveryListStore: deliveryListStore,
 		deliveryStore:     deliveryStore,
 		counterpartyStore: counterpartyStore,
+		scanClients:       []*websocket.Conn{},
 	}
 }
 

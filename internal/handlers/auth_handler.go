@@ -55,9 +55,67 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]interface{}{
+	http.SetCookie(w, &http.Cookie{
+		Name:     "token",
+		Value:    token,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false, // true на https
+		SameSite: http.SameSiteLaxMode,
+		MaxAge:   86400,
+	})
+
+	respondWithJSON(w, http.StatusOK, map[string]interface{}{
+		"id":       worker.ID,
 		"username": worker.Username,
-		"token":    token,
+		"role_id":  worker.RoleId,
+	})
+}
+
+func (h *Handlers) Logout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "token",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false, // true на https
+		SameSite: http.SameSiteLaxMode,
+		MaxAge:   -1,
+	})
+
+	respondWithJSON(w, http.StatusOK, map[string]string{
+		"message": "успешный выход",
+	})
+}
+
+func (h *Handlers) Me(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "токен отсутствует")
+		return
+	}
+
+	tokenString := cookie.Value
+	if tokenString == "" {
+		respondWithError(w, http.StatusUnauthorized, "пустой токен")
+		return
+	}
+
+	claims, err := auth.ParseToken(tokenString)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "невалидный токен")
+		return
+	}
+
+	worker, err := h.workerStore.GetByID(claims.UserID)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "пользователь не найден")
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, map[string]interface{}{
+		"id":       worker.ID,
+		"username": worker.Username,
 		"role_id":  worker.RoleId,
 	})
 }

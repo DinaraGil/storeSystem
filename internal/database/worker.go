@@ -36,6 +36,28 @@ func (s *WorkerStore) GetByUsername(username string) (*models.Worker, error) {
 	return &worker, nil
 }
 
+func (s *WorkerStore) GetByID(id int) (*models.Worker, error) {
+	var worker models.Worker
+
+	query := `
+	SELECT worker_id, full_name, username, password_hash, role_id
+	FROM worker
+	WHERE worker_id=$1
+	`
+
+	err := s.db.Get(&worker, query, id)
+
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("worker not found")
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &worker, nil
+}
+
 func (s *WorkerStore) Create(worker models.CreateWorkerInput) (*models.Worker, error) {
 	hash, err := auth.HashPassword(worker.Password)
 	if err != nil {
