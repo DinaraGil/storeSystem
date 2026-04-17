@@ -9,13 +9,17 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+type scanSubscription struct {
+	DeliveryID int
+	Conn       *websocket.Conn
+}
 type Handlers struct {
 	itemStore         *database.ItemStore
 	workerStore       *database.WorkerStore
 	deliveryListStore *database.DeliveryListStore
 	deliveryStore     *database.DeliveryStore
 	counterpartyStore *database.CounterpartyStore
-	scanClients       []*websocket.Conn
+	scanClients       map[int][]scanSubscription
 	mu                sync.Mutex
 }
 
@@ -32,7 +36,7 @@ func NewHandlers(
 		deliveryListStore: deliveryListStore,
 		deliveryStore:     deliveryStore,
 		counterpartyStore: counterpartyStore,
-		scanClients:       []*websocket.Conn{},
+		scanClients:       make(map[int][]scanSubscription),
 	}
 }
 

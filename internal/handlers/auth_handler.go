@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"storeSystem/internal/auth"
 	"storeSystem/internal/models"
@@ -29,27 +28,13 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = auth.CheckPassword(worker.PasswordHash, input.Password)
-	fmt.Println(err)
-	fmt.Println(worker.PasswordHash)
-	fmt.Println(input.Password)
 
 	if err != nil {
 		respondWithError(w, http.StatusUnauthorized, "Неправильное имя пользователя или пароль")
 		return
 	}
 
-	role := ""
-
-	switch worker.RoleId {
-	case 1:
-		role = "ADMIN"
-	case 2:
-		role = "WAREHOUSE_WORKER"
-	default:
-		role = "UNKNOWN"
-	}
-
-	token, err := auth.GenerateToken(worker.ID, role)
+	token, err := auth.GenerateToken(worker.ID, worker.RoleId, worker.Username)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "internal error")
 		return
@@ -89,34 +74,40 @@ func (h *Handlers) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) Me(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("token")
-	if err != nil {
-		respondWithError(w, http.StatusUnauthorized, "токен отсутствует")
-		return
-	}
+	//cookie, err := r.Cookie("token")
+	//if err != nil {
+	//	respondWithError(w, http.StatusUnauthorized, "токен отсутствует")
+	//	return
+	//}
+	//
+	//tokenString := cookie.Value
+	//if tokenString == "" {
+	//	respondWithError(w, http.StatusUnauthorized, "пустой токен")
+	//	return
+	//}
+	//
+	//claims, err := auth.ParseToken(tokenString)
+	//if err != nil {
+	//	respondWithError(w, http.StatusUnauthorized, "невалидный токен")
+	//	return
+	//}
+	//
+	//worker, err := h.workerStore.GetByID(claims.UserID)
+	//if err != nil {
+	//	respondWithError(w, http.StatusUnauthorized, "пользователь не найден")
+	//	return
+	//}
 
-	tokenString := cookie.Value
-	if tokenString == "" {
-		respondWithError(w, http.StatusUnauthorized, "пустой токен")
-		return
-	}
-
-	claims, err := auth.ParseToken(tokenString)
-	if err != nil {
-		respondWithError(w, http.StatusUnauthorized, "невалидный токен")
-		return
-	}
-
-	worker, err := h.workerStore.GetByID(claims.UserID)
-	if err != nil {
-		respondWithError(w, http.StatusUnauthorized, "пользователь не найден")
+	claims, ok := GetUserClaimsFromContext(r.Context())
+	if !ok {
+		respondWithError(w, http.StatusUnauthorized, "нет данных пользователя")
 		return
 	}
 
 	respondWithJSON(w, http.StatusOK, map[string]interface{}{
-		"id":       worker.ID,
-		"username": worker.Username,
-		"role_id":  worker.RoleId,
+		"id":       claims.UserID,
+		"username": claims.Username,
+		"role_id":  claims.RoleID,
 	})
 }
 

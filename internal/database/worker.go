@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"net/http"
 	"storeSystem/internal/auth"
 	"storeSystem/internal/models"
 
@@ -85,20 +84,6 @@ func (s *WorkerStore) Create(worker models.CreateWorkerInput) (*models.Worker, e
 	}
 
 	return &createdWorker, nil
-}
-
-func RequireAdmin(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		user := auth.GetUserFromContext(r)
-
-		if user.Role != "ADMIN" {
-			http.Error(w, "Forbidden", http.StatusForbidden)
-			return
-		}
-
-		next.ServeHTTP(w, r)
-	})
 }
 
 func NewWorkerStore(db *sqlx.DB) *WorkerStore {

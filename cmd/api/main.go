@@ -46,45 +46,51 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.Timeout(60 * time.Second))
 
-	router.Route("/items", func(r chi.Router) {
-		r.Get("/", handler.GetAllItems)     // GET /items
-		r.Post("/", handler.CreateItem)     // POST /items
-		r.Get("/{id}", handler.GetItemByID) // GET /items/1
-		r.Put("/{id}", handler.UpdateItem)  // PUT /items/1
-	})
-
-	router.Route("/delivery_lists", func(r chi.Router) {
-		r.Get("/", handler.GetAllDeliveryLists)
-		r.Post("/", handler.CreateDeliveryList)
-		r.Get("/{id}", handler.GetDeliveryListByID)
-		r.Post("/upload", handler.UploadDeliveryList)
-	})
-
-	router.Route("/deliveries", func(r chi.Router) {
-		r.Get("/", handler.GetAllDeliveries)
-		r.Post("/", handler.CreateDelivery)
-		r.Get("/{id}", handler.GetDeliveryByID)
-		r.Put("/{id}", handler.UpdateDelivery)
-		r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
-	})
+	router.Post("/auth/login", handler.Login)
 
 	router.Route("/workers", func(r chi.Router) {
 		r.Post("/", handler.CreateWorker) // POST /workers
 	})
 
-	router.Route("/auth", func(r chi.Router) {
-		r.Post("/login", handler.Login)
-		r.Post("/logout", handler.Logout)
-		r.Get("/me", handler.Me)
+	router.Group(func(router chi.Router) {
+		router.Use(handler.AuthMiddleware)
+
+		router.Route("/items", func(r chi.Router) {
+			r.Get("/", handler.GetAllItems)                               // GET /items
+			r.With(handlers.RequireAdmin()).Post("/", handler.CreateItem) // POST /items
+			r.Get("/{id}", handler.GetItemByID)                           // GET /items/1
+			r.Put("/{id}", handler.UpdateItem)                            // PUT /items/1
+		})
+
+		router.Route("/delivery_lists", func(r chi.Router) {
+			r.Get("/", handler.GetAllDeliveryLists)
+			r.With(handlers.RequireAdmin()).Post("/", handler.CreateDeliveryList)
+			r.Get("/{id}", handler.GetDeliveryListByID)
+			r.With(handlers.RequireAdmin()).Post("/upload", handler.UploadDeliveryList)
+		})
+
+		router.Route("/deliveries", func(r chi.Router) {
+			r.Get("/", handler.GetAllDeliveries)
+			r.With(handlers.RequireAdmin()).Post("/", handler.CreateDelivery)
+			r.Get("/{id}", handler.GetDeliveryByID)
+			r.Put("/{id}", handler.UpdateDelivery)
+			r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
+		})
+
+		router.Route("/auth", func(r chi.Router) {
+			r.Get("/me", handler.Me)
+			r.Post("/logout", handler.Logout)
+		})
+
+		router.Get("/ws/deliveries/{delivery_id}/scanners/{scanner_id}", handler.ScanSocket)
+
+		router.With(handlers.RequireAdmin()).Route("/counterparties", func(r chi.Router) {
+			r.Get("/", handler.GetAllCounterparties)
+			r.Get("/{id}", handler.GetCounterpartyByID)
+			r.Post("/", handler.CreateCounterparty)
+		})
 	})
 
-	router.Get("/ws/scan", handler.ScanSocket)
-
-	router.Route("/counterparties", func(r chi.Router) {
-		r.Get("/", handler.GetAllCounterparties)
-		r.Get("/{id}", handler.GetCounterpartyByID)
-		r.Post("/", handler.CreateCounterparty)
-	})
 	//cors middleware
 
 	serverAddr := ":" + serverPort

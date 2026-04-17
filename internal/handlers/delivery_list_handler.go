@@ -61,7 +61,7 @@ func (h *Handlers) CreateDeliveryList(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, delList)
 }
 
-func (h *Handlers) AddFromFile(line string) (*models.DeliveryList, error) {
+func (h *Handlers) AddFromFile(line string, userID int) (*models.DeliveryList, error) {
 	line = strings.TrimSpace(line)
 	if line == "" {
 		return nil, fmt.Errorf("пустая строка")
@@ -77,8 +77,8 @@ func (h *Handlers) AddFromFile(line string) (*models.DeliveryList, error) {
 	input.DeliveryId, _ = strconv.Atoi(params[0])
 	input.SupplierId, _ = strconv.Atoi(params[1])
 	input.Article = params[2]
-	input.Amount, _ = strconv.Atoi(params[3])
-	input.CreatedBy = 1
+	input.ExpectedAmount, _ = strconv.Atoi(params[3])
+	input.CreatedBy = userID
 
 	delList, err := h.deliveryListStore.Create(input)
 
@@ -101,6 +101,7 @@ func (h *Handlers) UploadDeliveryList(w http.ResponseWriter, r *http.Request) {
 
 	reader := bufio.NewReader(file)
 	firstLine := true
+	claims, _ := GetUserClaimsFromContext(r.Context())
 
 	var result []*models.DeliveryList
 
@@ -121,7 +122,7 @@ func (h *Handlers) UploadDeliveryList(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Printf("%s len line %d", line, len(line))
 
-		delList, err := h.AddFromFile(line)
+		delList, err := h.AddFromFile(line, claims.UserID)
 		if err != nil {
 			respondWithError(w, http.StatusBadRequest, err.Error())
 			return

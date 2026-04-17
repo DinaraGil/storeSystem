@@ -73,7 +73,7 @@ CREATE TABLE worker
 CREATE TABLE delivery
 (
     delivery_id        SERIAL PRIMARY KEY,
-    status             TEXT   NOT NULL,
+    status             TEXT   NOT NULL default 'NEW',
     planned_arrival_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     accepted_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by         INT REFERENCES worker (worker_id),
@@ -108,7 +108,9 @@ CREATE TABLE delivery_list
     delivery_list_id SERIAL PRIMARY KEY,
     delivery_id      INT REFERENCES delivery (delivery_id) ON DELETE CASCADE,
     supplier_id      INT REFERENCES counterparty (counterparty_id),
-    amount           INT  NOT NULL,
+    expected_amount           INT  NOT NULL,
+    real_amount INT DEFAULT 0,
+    status TEXT NOT NULL default 'NEW',
     article          TEXT NOT NULL,
     created_by       INT REFERENCES worker (worker_id),
     updated_by       INT REFERENCES worker (worker_id),
@@ -141,17 +143,23 @@ CREATE TABLE shipment_list
 CREATE TABLE item
 (
     item_id          SERIAL PRIMARY KEY,
-    rfid_id          TEXT NOT NULL,
+    rfid_id          TEXT NOT NULL UNIQUE,
     delivery_list_id INT REFERENCES delivery_list (delivery_list_id) ON DELETE CASCADE,
     supplier_id      INT REFERENCES counterparty (counterparty_id),
     name             TEXT NOT NULL,
     article          TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'STOCKED',
     created_by       INT REFERENCES worker (worker_id),
     updated_by       INT REFERENCES worker (worker_id),
     created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+create table stock_balance (
+    article TEXT PRIMARY KEY,
+    quantity INT NOT NULL DEFAULT 0,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 -- =========================
 -- EVENT
 -- =========================
@@ -159,8 +167,9 @@ CREATE TABLE item
 CREATE TABLE event
 (
     event_id   SERIAL PRIMARY KEY,
-    rfid_id    TEXT NOT NULL,
+    rfid_id    TEXT,
     article    TEXT,
+    scanner INT,
     is_in      BOOL,
     error      TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -178,6 +187,8 @@ CREATE TABLE state
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
 
 -- =========================
 -- QUANTITY MISTAKE
@@ -344,7 +355,7 @@ VALUES (2001, 'NEW', 1, NULL),
 -- =========================
 
 INSERT INTO delivery_list
-    (delivery_id, supplier_id, amount, article, created_by)
+    (delivery_id, supplier_id, expected_amount, article, created_by)
 VALUES (1, 1, 10, 'ART-001', 1),
        (1, 2, 15, 'ART-002', 2),
        (2, 1, 20, 'ART-003', 1),
@@ -401,6 +412,7 @@ BEGIN
       'event_id', NEW.event_id,
       'rfid_id', NEW.rfid_id,
       'article', NEW.article,
+      'scanner', NEW.scanner,
       'is_in', NEW.is_in,
       'error', NEW.error,
       'created_at', NEW.created_at
