@@ -21,6 +21,11 @@ var upgrader = websocket.Upgrader{
 func (h *Handlers) ScanSocket(w http.ResponseWriter, r *http.Request) {
 	deliveryStr := chi.URLParam(r, "delivery_id")
 	scannerStr := chi.URLParam(r, "scanner_id")
+	claims, ok := GetUserClaimsFromContext(r.Context())
+
+	if !ok {
+		return
+	}
 
 	deliveryID, err := strconv.Atoi(deliveryStr)
 	if err != nil {
@@ -41,6 +46,7 @@ func (h *Handlers) ScanSocket(w http.ResponseWriter, r *http.Request) {
 
 	sub := scanSubscription{
 		DeliveryID: deliveryID,
+		WorkerID:   claims.UserID,
 		Conn:       conn,
 	}
 
@@ -120,15 +126,20 @@ func (h *Handlers) ListenEvents(dsn string) {
 
 			subs := h.getScannerSubscriptions(evt.Scanner)
 
+			var payload []byte
 			for _, sub := range subs {
-				err := h.deliveryListStore.ProcessScannerEvent(sub.DeliveryID, evt)
+				updatedList, err := h.deliveryListStore.ProcessScannerEvent(sub.DeliveryID, evt, sub.WorkerID)
 				if err != nil {
 					fmt.Println(err)
-					// можно логировать, а клиенту отправить ошибку
+					continue
+				}
+				payload, err = json.Marshal(updatedList)
+				if err != nil {
+					continue
 				}
 			}
 
-			h.BroadcastToScanner(evt.Scanner, []byte(n.Extra))
+			h.BroadcastToScanner(evt.Scanner, payload)
 		}
 	}
 }

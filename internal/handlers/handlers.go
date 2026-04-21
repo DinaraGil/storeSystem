@@ -11,6 +11,7 @@ import (
 
 type scanSubscription struct {
 	DeliveryID int
+	WorkerID   int
 	Conn       *websocket.Conn
 }
 type Handlers struct {

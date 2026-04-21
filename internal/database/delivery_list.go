@@ -77,25 +77,36 @@ func (s *DeliveryListStore) Create(input models.CreateDeliveryListInput) (*model
 	return &delList, nil
 }
 
-func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event) error {
+type DeliveryListUpdateDTO struct {
+	DeliveryListID int       `json:"delivery_list_id"`
+	DeliveryID     int       `json:"delivery_id"`
+	SupplierID     int       `json:"supplier_id"`
+	ExpectedAmount int       `json:"expected_amount"`
+	RealAmount     int       `json:"real_amount"`
+	Article        string    `json:"article"`
+	CreatedBy      int       `json:"created_by"`
+	UpdatedBy      int       `json:"updated_by"`
+	CreatedAt      time.Time `json:"created_at_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+	Status         string    `json:"status"`
+}
+
+func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event, workerID int) (*DeliveryListUpdateDTO, error) {
 	if evt.Error != nil && *evt.Error != "" {
-		return fmt.Errorf("error in event")
+		return nil, fmt.Errorf("error in event")
 	}
 
 	if evt.IsIn == nil || !*evt.IsIn {
-		return fmt.Errorf("the rfid is out")
+		return nil, fmt.Errorf("the rfid is out")
 	}
 
 	tx, err := s.db.Begin()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer tx.Rollback()
 
 	var supplierID int
-	//var expectedAmount int
-	//var realAmount int
-
 	var deliveryListID int
 
 	err = tx.QueryRow(`
@@ -105,7 +116,10 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 	`, deliveryID, evt.Article).Scan(&deliveryListID, &supplierID)
 
 	if err != nil {
-		return err
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("delivery_list not found for delivery_id=%d article=%s", deliveryID, evt.Article)
+		}
+		return nil, err
 	}
 
 	var existingItemID int
@@ -116,25 +130,27 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 	`, evt.RfidId).Scan(&existingItemID)
 
 	if err == nil {
-		return fmt.Errorf("item already exist")
+		return nil, fmt.Errorf("item already exist")
 	}
 	if err != sql.ErrNoRows {
-		return err
+		return nil, err
 	}
 
 	var itemID int
 	err = tx.QueryRow(`
 		INSERT INTO item (
-			rfid_id, delivery_list_id, supplier_id, name, article
+			rfid_id, delivery_list_id, supplier_id, name, article, created_by, updated_by
 		)
-		VALUES ($1, $2, $3, $4, $5)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING item_id
-	`, evt.RfidId, deliveryListID, supplierID, "aboba", evt.Article).Scan(&itemID)
+	`, evt.RfidId, deliveryListID, supplierID, "aboba", evt.Article, workerID, workerID).Scan(&itemID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = tx.Exec(`
+	var updated DeliveryListUpdateDTO
+
+	err = tx.QueryRow(`
 		UPDATE delivery_list
 		SET real_amount = real_amount + 1,
 		    status = CASE
@@ -142,11 +158,32 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 		        WHEN real_amount + 1 > expected_amount THEN 'OVERMUCH'
 		        ELSE 'IN_PROGRESS'
 		    END,
-		    updated_at = CURRENT_TIMESTAMP
-		WHERE delivery_list_id = $1
-	`, deliveryListID)
+		    updated_at = CURRENT_TIMESTAMP,
+		    updated_by = $1
+		WHERE delivery_list_id = $2
+		RETURNING 
+			delivery_list_id,
+			delivery_id,
+			supplier_id,
+			expected_amount,
+			real_amount,
+			updated_by,
+			article,
+			status,
+			updated_at
+	`, workerID, deliveryListID).Scan(
+		&updated.DeliveryListID,
+		&updated.DeliveryID,
+		&updated.SupplierID,
+		&updated.ExpectedAmount,
+		&updated.RealAmount,
+		&updated.UpdatedBy,
+		&updated.Article,
+		&updated.Status,
+		&updated.UpdatedAt,
+	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	_, err = tx.Exec(`
@@ -158,8 +195,12 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 			updated_at = CURRENT_TIMESTAMP
 	`, evt.Article)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return tx.Commit()
+	if err = tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return &updated, nil
 }
