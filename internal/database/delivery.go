@@ -19,7 +19,7 @@ func NewDeliveryStore(db *sqlx.DB) *DeliveryStore {
 
 func (s *DeliveryStore) GetAll() ([]models.Delivery, error) {
 	var del []models.Delivery
-	query := `SELECT * FROM delivery order by created_at desc;`
+	query := `SELECT * FROM delivery order by delivery_id asc;`
 
 	err := s.db.Select(&del, query)
 
@@ -93,4 +93,31 @@ func (s *DeliveryStore) Update(delivery_id int, input models.UpdateDeliveryInput
 		return nil, err
 	}
 	return &updatedDel, nil
+}
+
+func (s *DeliveryStore) CompleteDelivery(deliveryID int) error {
+	_, err := s.db.Exec(`
+		UPDATE delivery
+		SET status = CASE
+			WHEN NOT EXISTS (
+				SELECT 1
+				FROM delivery_list
+				WHERE delivery_id = $1
+				  AND status != 'COMPLETED'
+			)
+			THEN 'COMPLETED'
+		    WHEN NOT EXISTS (
+				SELECT 1
+				FROM delivery_list
+				WHERE delivery_id = $1
+				  AND status != 'NEW'
+			)
+		    THEN 'NEW'
+			ELSE 'ERROR'
+		END,
+		updated_at = CURRENT_TIMESTAMP
+		WHERE delivery_id = $1
+	`, deliveryID)
+	fmt.Println(err)
+	return err
 }

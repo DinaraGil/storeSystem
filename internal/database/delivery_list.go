@@ -46,7 +46,7 @@ func (s *DeliveryListStore) GetByID(id int) (*models.DeliveryList, error) {
 
 func (s *DeliveryListStore) GetByDeliveryID(id int) ([]models.DeliveryList, error) {
 	var delLists []models.DeliveryList
-	query := `SELECT * FROM delivery_list where delivery_id=$1;`
+	query := `SELECT * FROM delivery_list where delivery_id=$1 ORDER BY delivery_list_id;`
 
 	err := s.db.Select(&delLists, query, id)
 
@@ -156,7 +156,7 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 		    status = CASE
 		        WHEN real_amount + 1 = expected_amount THEN 'COMPLETED'
 		        WHEN real_amount + 1 > expected_amount THEN 'OVERMUCH'
-		        ELSE 'IN_PROGRESS'
+		        ELSE 'NOT_ENOUGH'
 		    END,
 		    updated_at = CURRENT_TIMESTAMP,
 		    updated_by = $1
@@ -194,6 +194,16 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 			quantity = stock_balance.quantity + 1,
 			updated_at = CURRENT_TIMESTAMP
 	`, evt.Article)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = tx.Exec(`
+		UPDATE delivery
+		SET accepted_by = $1,
+		    updated_at = CURRENT_TIMESTAMP
+		WHERE delivery_id = $2;`,
+		workerID, deliveryID)
 	if err != nil {
 		return nil, err
 	}

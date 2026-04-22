@@ -79,6 +79,7 @@ func (h *Handlers) AddFromFile(line string, userID int) (*models.DeliveryList, e
 	input.Article = params[2]
 	input.ExpectedAmount, _ = strconv.Atoi(params[3])
 	input.CreatedBy = userID
+	input.UpdatedBy = &userID
 
 	delList, err := h.deliveryListStore.Create(input)
 

@@ -19,6 +19,7 @@ type Handlers struct {
 	workerStore       *database.WorkerStore
 	deliveryListStore *database.DeliveryListStore
 	deliveryStore     *database.DeliveryStore
+	stockStore        *database.StockStore
 	counterpartyStore *database.CounterpartyStore
 	scanClients       map[int][]scanSubscription
 	mu                sync.Mutex
@@ -30,6 +31,7 @@ func NewHandlers(
 	deliveryListStore *database.DeliveryListStore,
 	deliveryStore *database.DeliveryStore,
 	counterpartyStore *database.CounterpartyStore,
+	stockStore *database.StockStore,
 ) *Handlers {
 	return &Handlers{
 		itemStore:         itemStore,
@@ -37,6 +39,7 @@ func NewHandlers(
 		deliveryListStore: deliveryListStore,
 		deliveryStore:     deliveryStore,
 		counterpartyStore: counterpartyStore,
+		stockStore:        stockStore,
 		scanClients:       make(map[int][]scanSubscription),
 	}
 }

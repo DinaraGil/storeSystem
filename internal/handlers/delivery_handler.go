@@ -111,3 +111,22 @@ func (h *Handlers) GetDeliveryListsByDeliveryID(w http.ResponseWriter, r *http.R
 	}
 	respondWithJSON(w, http.StatusOK, lists)
 }
+
+func (h *Handlers) CompleteDelivery(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Некорректный id")
+		return
+	}
+
+	err = h.deliveryStore.CompleteDelivery(id)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, map[string]string{
+		"status": "completed",
+	})
+}

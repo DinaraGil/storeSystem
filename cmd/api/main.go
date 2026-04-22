@@ -35,8 +35,9 @@ func main() {
 	deliveryListStore := database.NewDeliveryListStore(db)
 	deliveryStore := database.NewDeliveryStore(db)
 	counterpartyStore := database.NewCounterpartyStore(db)
+	stockStore := database.NewStockStore(db)
 
-	handler := handlers.NewHandlers(itemStore, workerStore, deliveryListStore, deliveryStore, counterpartyStore)
+	handler := handlers.NewHandlers(itemStore, workerStore, deliveryListStore, deliveryStore, counterpartyStore, stockStore)
 
 	go handler.ListenEvents(databaseURL)
 
@@ -75,6 +76,7 @@ func main() {
 			r.Get("/{id}", handler.GetDeliveryByID)
 			r.Put("/{id}", handler.UpdateDelivery)
 			r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
+			router.Put("/{id}/complete", handler.CompleteDelivery)
 		})
 
 		router.Route("/auth", func(r chi.Router) {
@@ -89,6 +91,9 @@ func main() {
 			r.Get("/{id}", handler.GetCounterpartyByID)
 			r.Post("/", handler.CreateCounterparty)
 		})
+
+		router.With(handlers.RequireAdmin()).Get("/stocks", handler.GetAllStocks)
+		//router.With(handlers.RequireAdmin()).Post("/report", handler.GenerateReport)
 	})
 
 	//cors middleware
