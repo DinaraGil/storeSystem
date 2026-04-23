@@ -93,7 +93,7 @@ func main() {
 		})
 
 		router.With(handlers.RequireAdmin()).Get("/stocks", handler.GetAllStocks)
-		//router.With(handlers.RequireAdmin()).Post("/report", handler.GenerateReport)
+		router.With(handlers.RequireAdmin()).Post("/report", handler.GenerateReport)
 	})
 
 	//cors middleware
