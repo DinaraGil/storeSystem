@@ -4,8 +4,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"storeSystem/internal/config"
 	"storeSystem/internal/database"
 	"storeSystem/internal/handlers"
+	"storeSystem/internal/minio"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -21,6 +23,15 @@ func main() {
 	if serverPort == "" {
 		serverPort = "8080"
 	}
+	
+	config.LoadConfig()
+
+	minioClient := minio.NewMinioClient()
+	err := minioClient.InitMinio()
+	if err != nil {
+		log.Fatalf("Ошибка инициализации Minio: %v", err)
+	}
+
 	log.Printf("starting server on port %s", serverPort)
 	db, err := database.Connect(databaseURL)
 	if err != nil {
@@ -37,7 +48,15 @@ func main() {
 	counterpartyStore := database.NewCounterpartyStore(db)
 	stockStore := database.NewStockStore(db)
 
-	handler := handlers.NewHandlers(itemStore, workerStore, deliveryListStore, deliveryStore, counterpartyStore, stockStore)
+	handler := handlers.NewHandlers(
+		itemStore,
+		workerStore,
+		deliveryListStore,
+		deliveryStore,
+		counterpartyStore,
+		stockStore,
+		minioClient,
+	)
 
 	go handler.ListenEvents(databaseURL)
 

@@ -13,20 +13,31 @@ import (
 )
 
 func (m *minioClient) CreateOne(file helpers.FileDataType) (string, error) {
-	// Генерация уникального идентификатора для нового объекта.
-	objectID := uuid.New().String()
+	objectID := uuid.New().String() + "_" + file.FileName
 
-	// Создание потока данных для загрузки в бакет Minio.
 	reader := bytes.NewReader(file.Data)
 
-	// Загрузка данных в бакет Minio с использованием контекста для возможности отмены операции.
-	_, err := m.mc.PutObject(context.Background(), config.AppConfig.BucketName, objectID, reader, int64(len(file.Data)), minio.PutObjectOptions{})
+	_, err := m.mc.PutObject(
+		context.Background(),
+		config.AppConfig.BucketName,
+		objectID,
+		reader,
+		int64(len(file.Data)),
+		minio.PutObjectOptions{
+			ContentType: "text/csv",
+		},
+	)
 	if err != nil {
 		return "", fmt.Errorf("ошибка при создании объекта %s: %v", file.FileName, err)
 	}
 
-	// Получение URL для загруженного объекта
-	url, err := m.mc.PresignedGetObject(context.Background(), config.AppConfig.BucketName, objectID, time.Second*24*60*60, nil)
+	url, err := m.mc.PresignedGetObject(
+		context.Background(),
+		config.AppConfig.BucketName,
+		objectID,
+		time.Hour*24,
+		nil,
+	)
 	if err != nil {
 		return "", fmt.Errorf("ошибка при создании URL для объекта %s: %v", file.FileName, err)
 	}

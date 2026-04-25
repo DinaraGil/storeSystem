@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"storeSystem/internal/database"
+	"storeSystem/internal/minio"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -22,6 +23,7 @@ type Handlers struct {
 	stockStore        *database.StockStore
 	counterpartyStore *database.CounterpartyStore
 	scanClients       map[int][]scanSubscription
+	minioService      minio.Client
 	mu                sync.Mutex
 }
 
@@ -32,6 +34,7 @@ func NewHandlers(
 	deliveryStore *database.DeliveryStore,
 	counterpartyStore *database.CounterpartyStore,
 	stockStore *database.StockStore,
+	minioService minio.Client,
 ) *Handlers {
 	return &Handlers{
 		itemStore:         itemStore,
@@ -40,6 +43,7 @@ func NewHandlers(
 		deliveryStore:     deliveryStore,
 		counterpartyStore: counterpartyStore,
 		stockStore:        stockStore,
+		minioService:      minioService,
 		scanClients:       make(map[int][]scanSubscription),
 	}
 }

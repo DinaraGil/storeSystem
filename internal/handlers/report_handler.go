@@ -1,11 +1,15 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
+	"storeSystem/internal/helpers"
+	"strconv"
+
+	"github.com/google/uuid"
 )
 
 type ReportConfig struct {
@@ -16,146 +20,75 @@ type ReportConfig struct {
 	//date       string
 }
 
-func (h *Handlers) GenerateStockReport(config *ReportConfig) error {
+func (h *Handlers) GenerateStockReport(config *ReportConfig) (string, error) {
 	stocks, err := h.stockStore.GetAll()
 	if err != nil {
-		return fmt.Errorf("Ошибка получения остатков")
+		return "", fmt.Errorf("ошибка получения остатков")
 	}
 
-	file, err := os.Create("stock.csv")
-	if err != nil {
-		return err
+	var buf bytes.Buffer
+	writer := csv.NewWriter(&buf)
+
+	if err := writer.Write([]string{"Артикул", "Количество", "Время изменения"}); err != nil {
+		return "", err
 	}
-	defer file.Close()
-
-	writer := csv.NewWriter(file)
-	defer writer.Flush()
-
-	//header := []string{"ID", "Name", "Age"}
-	//if err := writer.Write(header); err != nil {
-	//	log.Fatal(err)
-	//}
 
 	for _, stock := range stocks {
-		jsonData, err := json.Marshal(stock)
-		fmt.Println(string(jsonData))
-
-		var result map[string]interface{}
-		err = json.Unmarshal(jsonData, &result)
-
-		if err != nil {
-			fmt.Printf("%v\n", err)
-			return err
+		record := []string{
+			stock.Article,
+			strconv.Itoa(stock.Quantity),
+			stock.UpdatedAt.Format("2006-01-02 15:04:05"),
 		}
 
-		values := make([]string, 0, len(result))
-		for _, value := range result {
-			values = append(values, fmt.Sprint(value))
-		}
-
-		fmt.Println(values)
-		if err := writer.Write(values); err != nil {
-			return err
+		if err := writer.Write(record); err != nil {
+			return "", err
 		}
 	}
 
-	//filename := config.reportType
-	//f, err := file.Open()
-	//if err != nil {
-	//
-	//}
-	//fileData := helpers.FileDataType{
-	//	FileName: filename,  // Имя файла
-	//	Data:     fileBytes, // Содержимое файла в виде байтового среза
-	//}
-	return err
+	writer.Flush()
+	if err := writer.Error(); err != nil {
+		return "", err
+	}
+
+	filename := "stock_report_" + uuid.NewString() + ".csv"
+
+	fileData := helpers.FileDataType{
+		FileName: filename,
+		Data:     buf.Bytes(),
+	}
+
+	link, err := h.minioService.CreateOne(fileData)
+	if err != nil {
+		return "", fmt.Errorf("unable to save the file: %w", err)
+	}
+
+	return link, nil
 }
 
-//
-//func (h *Handler) CreateOne(c *gin.Context) {
-//	// Получаем файл из запроса
-//	file, err := c.FormFile("file")
-//	if err != nil {
-//		// Если файл не получен, возвращаем ошибку с соответствующим статусом и сообщением
-//		c.JSON(http.StatusBadRequest, errors.ErrorResponse{
-//			Status:  http.StatusBadRequest,
-//			Error:   "No file is received",
-//			Details: err,
-//		})
-//		return
-//	}
-//
-//	// Открываем файл для чтения
-//	f, err := file.Open()
-//	if err != nil {
-//		// Если файл не удается открыть, возвращаем ошибку с соответствующим статусом и сообщением
-//		c.JSON(http.StatusInternalServerError, errors.ErrorResponse{
-//			Status:  http.StatusInternalServerError,
-//			Error:   "Unable to open the file",
-//			Details: err,
-//		})
-//		return
-//	}
-//	defer f.Close() // Закрываем файл после завершения работы с ним
-//
-//	// Читаем содержимое файла в байтовый срез
-//	fileBytes, err := io.ReadAll(f)
-//	if err != nil {
-//		// Если не удается прочитать содержимое файла, возвращаем ошибку с соответствующим статусом и сообщением
-//		c.JSON(http.StatusInternalServerError, errors.ErrorResponse{
-//			Status:  http.StatusInternalServerError,
-//			Error:   "Unable to read the file",
-//			Details: err,
-//		})
-//		return
-//	}
-//
-//	// Создаем структуру FileDataType для хранения данных файла
-//	fileData := helpers.FileDataType{
-//		FileName: file.Filename, // Имя файла
-//		Data:     fileBytes,     // Содержимое файла в виде байтового среза
-//	}
-//
-//	// Сохраняем файл в MinIO с помощью метода CreateOne
-//	link, err := h.minioService.CreateOne(fileData)
-//	if err != nil {
-//		// Если не удается сохранить файл, возвращаем ошибку с соответствующим статусом и сообщением
-//		c.JSON(http.StatusInternalServerError, errors.ErrorResponse{
-//			Status:  http.StatusInternalServerError,
-//			Error:   "Unable to save the file",
-//			Details: err,
-//		})
-//		return
-//	}
-//
-//	// Возвращаем успешный ответ с URL-адресом сохраненного файла
-//	c.JSON(http.StatusOK, responses.SuccessResponse{
-//		Status:  http.StatusOK,
-//		Message: "File uploaded successfully",
-//		Data:    link, // URL-адрес загруженного файла
-//	})
-//}
-
 func (h *Handlers) GenerateReport(w http.ResponseWriter, r *http.Request) {
-	var config *ReportConfig
+	var config ReportConfig
 
 	if err := json.NewDecoder(r.Body).Decode(&config); err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	fmt.Println(*config)
+	var link string
+	var err error
 
-	var generationError error
 	switch config.ReportType {
 	case "stock":
-		generationError = h.GenerateStockReport(config)
+		link, err = h.GenerateStockReport(&config)
 	default:
-		generationError = fmt.Errorf("unknown report type")
+		err = fmt.Errorf("unknown report type")
 	}
-	if generationError != nil {
-		respondWithError(w, http.StatusInternalServerError, generationError.Error())
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJSON(w, http.StatusOK, "")
+
+	respondWithJSON(w, http.StatusOK, map[string]string{
+		"link": link,
+	})
 }
