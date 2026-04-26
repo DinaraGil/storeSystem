@@ -175,6 +175,18 @@ CREATE TABLE event
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE report (
+    report_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES worker(worker_id),
+    report_type TEXT NOT NULL,
+    file_name TEXT NOT NULL,
+    object_id TEXT NOT NULL,
+    bucket_name TEXT NOT NULL,
+    date_from DATE,
+    date_to DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- =========================
 -- STATE
 -- =========================
@@ -187,6 +199,7 @@ CREATE TABLE state
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 
 

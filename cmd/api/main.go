@@ -23,7 +23,7 @@ func main() {
 	if serverPort == "" {
 		serverPort = "8080"
 	}
-	
+
 	config.LoadConfig()
 
 	minioClient := minio.NewMinioClient()
@@ -47,6 +47,7 @@ func main() {
 	deliveryStore := database.NewDeliveryStore(db)
 	counterpartyStore := database.NewCounterpartyStore(db)
 	stockStore := database.NewStockStore(db)
+	reportStore := database.NewReportStore(db)
 
 	handler := handlers.NewHandlers(
 		itemStore,
@@ -56,6 +57,7 @@ func main() {
 		counterpartyStore,
 		stockStore,
 		minioClient,
+		reportStore,
 	)
 
 	go handler.ListenEvents(databaseURL)
@@ -112,7 +114,9 @@ func main() {
 		})
 
 		router.With(handlers.RequireAdmin()).Get("/stocks", handler.GetAllStocks)
-		router.With(handlers.RequireAdmin()).Post("/report", handler.GenerateReport)
+		
+		router.With(handlers.RequireAdmin()).Post("/reports/new", handler.GenerateReport)
+		router.With(handlers.RequireAdmin()).Get("/reports", handler.GetUsersReports)
 	})
 
 	//cors middleware

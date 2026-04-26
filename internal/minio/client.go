@@ -12,7 +12,7 @@ import (
 // Client интерфейс для взаимодействия с Minio
 type Client interface {
 	InitMinio() error
-	CreateOne(file helpers.FileDataType) (string, error)
+	CreateOne(file helpers.FileDataType) (*UploadedFile, error)
 	GetOne(objectID string) (string, error)
 }
 

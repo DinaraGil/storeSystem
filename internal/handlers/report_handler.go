@@ -6,31 +6,30 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"storeSystem/internal/config"
 	"storeSystem/internal/helpers"
 	"strconv"
-
-	"github.com/google/uuid"
+	"time"
 )
 
 type ReportConfig struct {
 	ReportType string `json:"report_type"`
 	DateFrom   string `json:"date_from"`
 	DateTo     string `json:"date_to"`
-	//clientID   int
-	//date       string
+	UserID     int
 }
 
-func (h *Handlers) GenerateStockReport(config *ReportConfig) (string, error) {
+func (h *Handlers) GenerateStockReport(reportConfig *ReportConfig) (*map[string]string, error) {
 	stocks, err := h.stockStore.GetAll()
 	if err != nil {
-		return "", fmt.Errorf("ошибка получения остатков")
+		return nil, fmt.Errorf("ошибка получения остатков")
 	}
 
 	var buf bytes.Buffer
 	writer := csv.NewWriter(&buf)
 
 	if err := writer.Write([]string{"Артикул", "Количество", "Время изменения"}); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	for _, stock := range stocks {
@@ -41,28 +40,44 @@ func (h *Handlers) GenerateStockReport(config *ReportConfig) (string, error) {
 		}
 
 		if err := writer.Write(record); err != nil {
-			return "", err
+			return nil, err
 		}
 	}
 
 	writer.Flush()
 	if err := writer.Error(); err != nil {
-		return "", err
+		return nil, err
 	}
 
-	filename := "stock_report_" + uuid.NewString() + ".csv"
+	filename := "stock_report_" + time.Now().Format("2006-01-02_15-04-05") + ".csv"
 
 	fileData := helpers.FileDataType{
 		FileName: filename,
 		Data:     buf.Bytes(),
 	}
 
-	link, err := h.minioService.CreateOne(fileData)
+	uploaded, err := h.minioService.CreateOne(fileData)
 	if err != nil {
-		return "", fmt.Errorf("unable to save the file: %w", err)
+		return nil, fmt.Errorf("unable to save the file: %w", err)
 	}
 
-	return link, nil
+	err = h.reportStore.Create(
+		reportConfig.UserID,
+		reportConfig.ReportType,
+		filename,
+		uploaded.ObjectID,
+		config.AppConfig.BucketName,
+		reportConfig.DateFrom,
+		reportConfig.DateTo,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &map[string]string{
+		"link":     uploaded.Link,
+		"filename": filename,
+	}, nil
 }
 
 func (h *Handlers) GenerateReport(w http.ResponseWriter, r *http.Request) {
@@ -73,12 +88,19 @@ func (h *Handlers) GenerateReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var link string
+	claims, ok := GetUserClaimsFromContext(r.Context())
+	if !ok {
+		respondWithError(w, http.StatusBadRequest, "no claims")
+		return
+	}
+	config.UserID = claims.UserID
+
+	var result *map[string]string
 	var err error
 
 	switch config.ReportType {
 	case "stock":
-		link, err = h.GenerateStockReport(&config)
+		result, err = h.GenerateStockReport(&config)
 	default:
 		err = fmt.Errorf("unknown report type")
 	}
@@ -89,6 +111,53 @@ func (h *Handlers) GenerateReport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, map[string]string{
-		"link": link,
+		"link":     (*result)["link"],
+		"filename": (*result)["filename"],
 	})
+}
+
+func (h *Handlers) GetUsersReports(w http.ResponseWriter, r *http.Request) {
+	claims, ok := GetUserClaimsFromContext(r.Context())
+	if !ok {
+		respondWithError(w, http.StatusBadRequest, "no claims")
+		return
+	}
+	userID := claims.UserID
+
+	reports, err := h.reportStore.GetByUserID(userID)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	type ReportResponse struct {
+		ReportID   int       `json:"report_id"`
+		ReportType string    `json:"report_type"`
+		FileName   string    `json:"file_name"`
+		Link       string    `json:"link"`
+		DateFrom   string    `json:"date_from"`
+		DateTo     string    `json:"date_to"`
+		CreatedAt  time.Time `json:"created_at"`
+	}
+
+	result := make([]ReportResponse, 0, len(reports))
+
+	for _, report := range reports {
+		link, err := h.minioService.GetOne(report.ObjectID)
+		if err != nil {
+			continue
+		}
+
+		result = append(result, ReportResponse{
+			ReportID:   report.ReportID,
+			ReportType: report.ReportType,
+			FileName:   report.FileName,
+			Link:       link,
+			DateFrom:   report.DateFrom,
+			DateTo:     report.DateTo,
+			CreatedAt:  report.CreatedAt,
+		})
+	}
+
+	respondWithJSON(w, http.StatusOK, result)
 }

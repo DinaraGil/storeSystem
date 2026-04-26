@@ -12,8 +12,13 @@ import (
 	"github.com/minio/minio-go/v7"
 )
 
-func (m *minioClient) CreateOne(file helpers.FileDataType) (string, error) {
-	objectID := uuid.New().String() + "_" + file.FileName
+type UploadedFile struct {
+	ObjectID string
+	Link     string
+}
+
+func (m *minioClient) CreateOne(file helpers.FileDataType) (*UploadedFile, error) {
+	objectID := uuid.New().String() + file.FileName
 
 	reader := bytes.NewReader(file.Data)
 
@@ -23,12 +28,10 @@ func (m *minioClient) CreateOne(file helpers.FileDataType) (string, error) {
 		objectID,
 		reader,
 		int64(len(file.Data)),
-		minio.PutObjectOptions{
-			ContentType: "text/csv",
-		},
+		minio.PutObjectOptions{ContentType: "text/csv"},
 	)
 	if err != nil {
-		return "", fmt.Errorf("ошибка при создании объекта %s: %v", file.FileName, err)
+		return nil, err
 	}
 
 	url, err := m.mc.PresignedGetObject(
@@ -39,10 +42,13 @@ func (m *minioClient) CreateOne(file helpers.FileDataType) (string, error) {
 		nil,
 	)
 	if err != nil {
-		return "", fmt.Errorf("ошибка при создании URL для объекта %s: %v", file.FileName, err)
+		return nil, err
 	}
 
-	return url.String(), nil
+	return &UploadedFile{
+		ObjectID: objectID,
+		Link:     url.String(),
+	}, nil
 }
 
 func (m *minioClient) GetOne(objectID string) (string, error) {
