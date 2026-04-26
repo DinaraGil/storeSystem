@@ -97,7 +97,7 @@ func main() {
 			r.Get("/{id}", handler.GetDeliveryByID)
 			r.Put("/{id}", handler.UpdateDelivery)
 			r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
-			router.Put("/{id}/complete", handler.CompleteDelivery)
+			r.Put("/{id}/complete", handler.CompleteDelivery)
 		})
 
 		router.Route("/auth", func(r chi.Router) {
@@ -114,7 +114,7 @@ func main() {
 		})
 
 		router.With(handlers.RequireAdmin()).Get("/stocks", handler.GetAllStocks)
-		
+
 		router.With(handlers.RequireAdmin()).Post("/reports/new", handler.GenerateReport)
 		router.With(handlers.RequireAdmin()).Get("/reports", handler.GetUsersReports)
 	})

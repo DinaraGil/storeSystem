@@ -29,6 +29,18 @@ func (s *DeliveryStore) GetAll() ([]models.Delivery, error) {
 	return del, nil
 }
 
+func (s *DeliveryStore) GetErrorDeliveries() ([]models.Delivery, error) {
+	var del []models.Delivery
+	query := `SELECT * FROM delivery WHERE status = 'ERROR' order by delivery_id asc;`
+
+	err := s.db.Select(&del, query)
+
+	if err != nil {
+		return nil, err
+	}
+	return del, nil
+}
+
 func (s *DeliveryStore) GetByID(id int) (*models.Delivery, error) {
 	var del models.Delivery
 	query := `SELECT * FROM delivery where delivery_id=$1;`

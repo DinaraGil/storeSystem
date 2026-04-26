@@ -19,17 +19,14 @@ type ReportConfig struct {
 	UserID     int
 }
 
-func (h *Handlers) GenerateStockReport(reportConfig *ReportConfig) (*map[string]string, error) {
+func (h *Handlers) writeStockCSV(writer *csv.Writer) error {
 	stocks, err := h.stockStore.GetAll()
 	if err != nil {
-		return nil, fmt.Errorf("ошибка получения остатков")
+		return fmt.Errorf("ошибка получения остатков")
 	}
 
-	var buf bytes.Buffer
-	writer := csv.NewWriter(&buf)
-
 	if err := writer.Write([]string{"Артикул", "Количество", "Время изменения"}); err != nil {
-		return nil, err
+		return err
 	}
 
 	for _, stock := range stocks {
@@ -40,8 +37,55 @@ func (h *Handlers) GenerateStockReport(reportConfig *ReportConfig) (*map[string]
 		}
 
 		if err := writer.Write(record); err != nil {
-			return nil, err
+			return err
 		}
+	}
+	return nil
+}
+
+func (h *Handlers) writeErrorDeliveriesCSV(writer *csv.Writer) error {
+	errorDeliveries, err := h.deliveryStore.GetErrorDeliveries()
+	if err != nil {
+		return fmt.Errorf("ошибка получения ошибочных поставок")
+	}
+
+	if err := writer.Write([]string{"Статус", "Время приема", "Создано сотрудником", "Принято сотрудником", "Время создания", "Время обновления"}); err != nil {
+		return err
+	}
+
+	for _, del := range errorDeliveries {
+		record := []string{
+			del.Status,
+			del.AcceptedAt.Format("2006-01-02 15:04:05"),
+			strconv.Itoa(del.CreatedBy),
+			strconv.Itoa(del.AcceptedBy),
+			del.CreatedAt.Format("2006-01-02 15:04:05"),
+			del.UpdatedAt.Format("2006-01-02 15:04:05"),
+		}
+
+		if err := writer.Write(record); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (h *Handlers) GenerateReportFile(reportConfig *ReportConfig) (*map[string]string, error) {
+	var buf bytes.Buffer
+	writer := csv.NewWriter(&buf)
+
+	var writeCSVError error
+	switch reportConfig.ReportType {
+	case "stock":
+		writeCSVError = h.writeStockCSV(writer)
+	case "delivery_errors":
+		writeCSVError = h.writeErrorDeliveriesCSV(writer)
+	default:
+		writeCSVError = fmt.Errorf("Неизвестный тип отчета")
+	}
+
+	if writeCSVError != nil {
+		return nil, writeCSVError
 	}
 
 	writer.Flush()
@@ -49,7 +93,7 @@ func (h *Handlers) GenerateStockReport(reportConfig *ReportConfig) (*map[string]
 		return nil, err
 	}
 
-	filename := "stock_report_" + time.Now().Format("2006-01-02_15-04-05") + ".csv"
+	filename := reportConfig.ReportType + "_" + time.Now().Format("2006-01-02_15-04-05") + ".csv"
 
 	fileData := helpers.FileDataType{
 		FileName: filename,
@@ -95,15 +139,7 @@ func (h *Handlers) GenerateReport(w http.ResponseWriter, r *http.Request) {
 	}
 	config.UserID = claims.UserID
 
-	var result *map[string]string
-	var err error
-
-	switch config.ReportType {
-	case "stock":
-		result, err = h.GenerateStockReport(&config)
-	default:
-		err = fmt.Errorf("unknown report type")
-	}
+	result, err := h.GenerateReportFile(&config)
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
