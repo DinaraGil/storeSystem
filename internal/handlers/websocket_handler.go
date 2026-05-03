@@ -14,28 +14,36 @@ import (
 	"net/http"
 )
 
+type Subscription struct {
+	ObjectID int // delivery_id / shipment_id
+	WorkerID int
+	Conn     *websocket.Conn
+	Handler  func(evt models.Event) (any, error)
+}
+
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
-func (h *Handlers) ScanSocket(w http.ResponseWriter, r *http.Request) {
-	deliveryStr := chi.URLParam(r, "delivery_id")
+func (h *Handlers) Socket(w http.ResponseWriter, r *http.Request) {
+	objectType := chi.URLParam(r, "object_type") // delivery / shipment
+	objectIDStr := chi.URLParam(r, "object_id")
 	scannerStr := chi.URLParam(r, "scanner_id")
-	claims, ok := GetUserClaimsFromContext(r.Context())
 
+	claims, ok := GetUserClaimsFromContext(r.Context())
 	if !ok {
 		return
 	}
 
-	deliveryID, err := strconv.Atoi(deliveryStr)
+	objectID, err := strconv.Atoi(objectIDStr)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Некорректный delivery_id")
+		respondWithError(w, http.StatusBadRequest, "invalid object_id")
 		return
 	}
 
 	scannerID, err := strconv.Atoi(scannerStr)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Некорректный scanner_id")
+		respondWithError(w, http.StatusBadRequest, "invalid scanner_id")
 		return
 	}
 
@@ -44,18 +52,21 @@ func (h *Handlers) ScanSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sub := scanSubscription{
-		DeliveryID: deliveryID,
-		WorkerID:   claims.UserID,
-		Conn:       conn,
+	sub := Subscription{
+		ObjectID: objectID,
+		WorkerID: claims.UserID,
+		Conn:     conn,
 	}
 
 	h.mu.Lock()
-	h.scanClients[scannerID] = append(h.scanClients[scannerID], sub)
+	if h.clients[scannerID] == nil {
+		h.clients[scannerID] = make(map[string][]Subscription)
+	}
+	h.clients[scannerID][objectType] = append(h.clients[scannerID][objectType], sub)
 	h.mu.Unlock()
 
 	defer func() {
-		h.removeScanClient(scannerID, conn)
+		h.removeClient(scannerID, objectType, conn)
 		conn.Close()
 	}()
 
@@ -66,51 +77,55 @@ func (h *Handlers) ScanSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handlers) removeScanClient(scannerID int, conn *websocket.Conn) {
+func (h *Handlers) removeClient(scannerID int, objectType string, conn *websocket.Conn) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	clients := h.scanClients[scannerID]
-	for i, sub := range clients {
+	list := h.clients[scannerID][objectType]
+
+	for i, sub := range list {
 		if sub.Conn == conn {
-			h.scanClients[scannerID] = append(clients[:i], clients[i+1:]...)
+			list = append(list[:i], list[i+1:]...)
 			break
 		}
 	}
 
-	if len(h.scanClients[scannerID]) == 0 {
-		delete(h.scanClients, scannerID)
+	if len(list) == 0 {
+		delete(h.clients[scannerID], objectType)
+	} else {
+		h.clients[scannerID][objectType] = list
 	}
 }
 
-func (h *Handlers) BroadcastToScanner(scannerID int, payload []byte) {
+func (h *Handlers) Broadcast(scannerID int, objectType string, payload []byte) {
 	h.mu.Lock()
-	defer h.mu.Unlock()
+	clients := append([]Subscription(nil), h.clients[scannerID][objectType]...)
+	h.mu.Unlock()
 
-	clients := h.scanClients[scannerID]
-	for i := 0; i < len(clients); i++ {
-		err := clients[i].Conn.WriteMessage(websocket.TextMessage, payload)
+	var alive []Subscription
+
+	for _, sub := range clients {
+		err := sub.Conn.WriteMessage(websocket.TextMessage, payload)
 		if err != nil {
-			clients[i].Conn.Close()
-			clients = append(clients[:i], clients[i+1:]...)
-			i--
+			sub.Conn.Close()
+			continue
 		}
+		alive = append(alive, sub)
 	}
 
-	if len(clients) == 0 {
-		delete(h.scanClients, scannerID)
+	h.mu.Lock()
+	if len(alive) == 0 {
+		delete(h.clients[scannerID], objectType)
 	} else {
-		h.scanClients[scannerID] = clients
+		h.clients[scannerID][objectType] = alive
 	}
+	h.mu.Unlock()
 }
 
 func (h *Handlers) ListenEvents(dsn string) {
 	listener := pq.NewListener(dsn, 10*time.Second, time.Minute, nil)
 
-	err := listener.Listen("event_channel")
-	if err != nil {
-		panic(err)
-	}
+	_ = listener.Listen("event_channel")
 
 	for {
 		select {
@@ -124,32 +139,43 @@ func (h *Handlers) ListenEvents(dsn string) {
 				continue
 			}
 
-			subs := h.getScannerSubscriptions(evt.Scanner)
-
-			var payload []byte
-			for _, sub := range subs {
-				updatedList, err := h.deliveryListStore.ProcessScannerEvent(sub.DeliveryID, evt, sub.WorkerID)
-				if err != nil {
-					fmt.Println(err)
-					continue
-				}
-				payload, err = json.Marshal(updatedList)
-				if err != nil {
-					continue
-				}
-			}
-
-			h.BroadcastToScanner(evt.Scanner, payload)
+			h.processEvent(evt)
 		}
 	}
 }
 
-func (h *Handlers) getScannerSubscriptions(scannerID int) []scanSubscription {
+func (h *Handlers) processEvent(evt models.Event) {
 	h.mu.Lock()
-	defer h.mu.Unlock()
+	scannerClients := h.clients[evt.Scanner]
+	h.mu.Unlock()
 
-	clients := h.scanClients[scannerID]
-	result := make([]scanSubscription, len(clients))
-	copy(result, clients)
-	return result
+	for objectType, subs := range scannerClients {
+
+		for _, sub := range subs {
+
+			var result any
+			var err error
+
+			switch objectType {
+			case "delivery":
+				result, err = h.deliveryListStore.ProcessScannerEvent(sub.ObjectID, evt, sub.WorkerID)
+
+			case "shipment":
+				result, err = h.shipmentListStore.ProcessScannerEvent(sub.ObjectID, evt, sub.WorkerID)
+			}
+
+			if err != nil {
+				fmt.Println(err)
+				errorPayload, _ := json.Marshal(map[string]string{
+					"error": err.Error(),
+				})
+				_ = sub.Conn.WriteMessage(websocket.TextMessage, errorPayload)
+				continue
+			}
+
+			payload, _ := json.Marshal(result)
+
+			_ = sub.Conn.WriteMessage(websocket.TextMessage, payload)
+		}
+	}
 }

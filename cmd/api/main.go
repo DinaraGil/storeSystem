@@ -45,6 +45,8 @@ func main() {
 	workerStore := database.NewWorkerStore(db)
 	deliveryListStore := database.NewDeliveryListStore(db)
 	deliveryStore := database.NewDeliveryStore(db)
+	shipmentListStore := database.NewShipmentListStore(db)
+	shipmentStore := database.NewShipmentStore(db)
 	counterpartyStore := database.NewCounterpartyStore(db)
 	stockStore := database.NewStockStore(db)
 	reportStore := database.NewReportStore(db)
@@ -54,6 +56,8 @@ func main() {
 		workerStore,
 		deliveryListStore,
 		deliveryStore,
+		shipmentListStore,
+		shipmentStore,
 		counterpartyStore,
 		stockStore,
 		minioClient,
@@ -95,9 +99,23 @@ func main() {
 			r.Get("/", handler.GetAllDeliveries)
 			r.With(handlers.RequireAdmin()).Post("/", handler.CreateDelivery)
 			r.Get("/{id}", handler.GetDeliveryByID)
-			r.Put("/{id}", handler.UpdateDelivery)
 			r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
 			r.Put("/{id}/complete", handler.CompleteDelivery)
+		})
+
+		router.Route("/shipments", func(r chi.Router) {
+			r.Get("/", handler.GetAllShipments)
+			r.With(handlers.RequireAdmin()).Post("/", handler.CreateShipment)
+			r.Get("/{id}", handler.GetShipmentByID)
+			r.Get("/{id}/lists", handler.GetShipmentListsByShipmentID)
+			r.Put("/{id}/complete", handler.CompleteShipment)
+		})
+
+		router.Route("/shipment_lists", func(r chi.Router) {
+			r.Get("/", handler.GetAllShipmentLists)
+			r.With(handlers.RequireAdmin()).Post("/", handler.CreateShipmentList)
+			r.Get("/{id}", handler.GetShipmentListByID)
+			r.With(handlers.RequireAdmin()).Post("/upload", handler.UploadShipmentList)
 		})
 
 		router.Route("/auth", func(r chi.Router) {
@@ -105,7 +123,7 @@ func main() {
 			r.Post("/logout", handler.Logout)
 		})
 
-		router.Get("/ws/deliveries/{delivery_id}/scanners/{scanner_id}", handler.ScanSocket)
+		router.Get("/ws/{object_type}/{object_id}/scanners/{scanner_id}", handler.Socket)
 
 		router.With(handlers.RequireAdmin()).Route("/counterparties", func(r chi.Router) {
 			r.Get("/", handler.GetAllCounterparties)
@@ -113,7 +131,7 @@ func main() {
 			r.Post("/", handler.CreateCounterparty)
 		})
 
-		router.With(handlers.RequireAdmin()).Get("/stocks", handler.GetAllStocks)
+		router.Get("/stocks", handler.GetAllStocks)
 
 		router.With(handlers.RequireAdmin()).Post("/reports/new", handler.GenerateReport)
 		router.With(handlers.RequireAdmin()).Get("/reports", handler.GetUsersReports)

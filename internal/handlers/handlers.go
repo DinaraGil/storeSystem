@@ -20,12 +20,14 @@ type Handlers struct {
 	workerStore       *database.WorkerStore
 	deliveryListStore *database.DeliveryListStore
 	deliveryStore     *database.DeliveryStore
+	shipmentListStore *database.ShipmentListStore
+	shipmentStore     *database.ShipmentStore
 	stockStore        *database.StockStore
 	counterpartyStore *database.CounterpartyStore
-	scanClients       map[int][]scanSubscription
 	minioService      minio.Client
 	reportStore       *database.ReportStore
 	mu                sync.Mutex
+	clients           map[int]map[string][]Subscription
 }
 
 func NewHandlers(
@@ -33,6 +35,8 @@ func NewHandlers(
 	workerStore *database.WorkerStore,
 	deliveryListStore *database.DeliveryListStore,
 	deliveryStore *database.DeliveryStore,
+	shipmentListStore *database.ShipmentListStore,
+	shipmentStore *database.ShipmentStore,
 	counterpartyStore *database.CounterpartyStore,
 	stockStore *database.StockStore,
 	minioService minio.Client,
@@ -43,11 +47,13 @@ func NewHandlers(
 		workerStore:       workerStore,
 		deliveryListStore: deliveryListStore,
 		deliveryStore:     deliveryStore,
+		shipmentListStore: shipmentListStore,
+		shipmentStore:     shipmentStore,
 		counterpartyStore: counterpartyStore,
 		stockStore:        stockStore,
 		minioService:      minioService,
 		reportStore:       reportStore,
-		scanClients:       make(map[int][]scanSubscription),
+		clients:           make(map[int]map[string][]Subscription),
 	}
 }
 

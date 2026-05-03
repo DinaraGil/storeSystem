@@ -109,15 +109,19 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 	var supplierID int
 	var deliveryListID int
 
+	if evt.Article == nil {
+		return nil, fmt.Errorf("article is nil in event")
+	}
+
 	err = tx.QueryRow(`
 		SELECT delivery_list_id, supplier_id
 		FROM delivery_list
 		WHERE delivery_id = $1 AND article = $2
-	`, deliveryID, evt.Article).Scan(&deliveryListID, &supplierID)
+	`, deliveryID, *evt.Article).Scan(&deliveryListID, &supplierID)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, fmt.Errorf("delivery_list not found for delivery_id=%d article=%s", deliveryID, evt.Article)
+			return nil, fmt.Errorf("delivery_list not found for delivery_id=%d article=%s", deliveryID, *evt.Article)
 		}
 		return nil, err
 	}
@@ -143,7 +147,7 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 		)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING item_id
-	`, evt.RfidId, deliveryListID, supplierID, "aboba", evt.Article, workerID, workerID).Scan(&itemID)
+	`, evt.RfidId, deliveryListID, supplierID, "aboba", *evt.Article, workerID, workerID).Scan(&itemID)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +197,7 @@ func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event
 		DO UPDATE SET
 			quantity = stock_balance.quantity + 1,
 			updated_at = CURRENT_TIMESTAMP
-	`, evt.Article)
+	`, *evt.Article)
 	if err != nil {
 		return nil, err
 	}

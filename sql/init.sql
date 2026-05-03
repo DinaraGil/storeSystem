@@ -8,9 +8,9 @@ DROP TABLE IF EXISTS delivery_list CASCADE;
 DROP TABLE IF EXISTS shipment_list CASCADE;
 DROP TABLE IF EXISTS item CASCADE;
 DROP TABLE IF EXISTS event CASCADE;
-DROP TABLE IF EXISTS state CASCADE;
-DROP TABLE IF EXISTS quantity_mistake CASCADE;
-DROP TABLE IF EXISTS scan_mistake CASCADE;
+-- DROP TABLE IF EXISTS state CASCADE;
+-- DROP TABLE IF EXISTS quantity_mistake CASCADE;
+-- DROP TABLE IF EXISTS scan_mistake CASCADE;
 
 -- =========================
 -- COUNTERPARTY ROLE
@@ -74,7 +74,6 @@ CREATE TABLE delivery
 (
     delivery_id        SERIAL PRIMARY KEY,
     status             TEXT   NOT NULL default 'NEW',
-    planned_arrival_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     accepted_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by         INT REFERENCES worker (worker_id),
     accepted_by        INT REFERENCES worker (worker_id),
@@ -89,9 +88,8 @@ CREATE TABLE delivery
 CREATE TABLE shipment
 (
     shipment_id         SERIAL PRIMARY KEY,
-    shipment_number     BIGINT NOT NULL,
+--     shipment_number     BIGINT NOT NULL,
     status              TEXT   NOT NULL,
-    planned_shipment_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     completed_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by          INT REFERENCES worker (worker_id),
     completed_by        INT REFERENCES worker (worker_id),
@@ -127,8 +125,9 @@ CREATE TABLE shipment_list
     shipment_list_id SERIAL PRIMARY KEY,
     shipment_id      INT REFERENCES shipment (shipment_id) ON DELETE CASCADE,
     customer_id      INT REFERENCES counterparty (counterparty_id),
-    supplier_id      INT REFERENCES counterparty (counterparty_id),
-    amount           INT  NOT NULL,
+    expected_amount           INT  NOT NULL,
+    real_amount INT DEFAULT 0,
+    status TEXT NOT NULL default 'NEW',
     article          TEXT NOT NULL,
     created_by       INT REFERENCES worker (worker_id),
     updated_by       INT REFERENCES worker (worker_id),
@@ -158,8 +157,17 @@ CREATE TABLE item
 create table stock_balance (
     article TEXT PRIMARY KEY,
     quantity INT NOT NULL DEFAULT 0,
+    reserved INT NOT NULL DEFAULT 0,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- CREATE TABLE stock_reservation (
+--     reservation_id SERIAL PRIMARY KEY,
+--     article TEXT NOT NULL,
+--     shipment_list_id INT REFERENCES shipment_list(shipment_list_id) ON DELETE CASCADE,
+--     reserved_quantity INT NOT NULL,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
 -- =========================
 -- EVENT
 -- =========================
@@ -191,44 +199,43 @@ CREATE TABLE report (
 -- STATE
 -- =========================
 
-CREATE TABLE state
-(
-    state_id   SERIAL PRIMARY KEY,
-    item_id    INT REFERENCES item (item_id) ON DELETE CASCADE,
-    state_name TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
+-- CREATE TABLE state
+-- (
+--     state_id   SERIAL PRIMARY KEY,
+--     item_id    INT REFERENCES item (item_id) ON DELETE CASCADE,
+--     state_name TEXT NOT NULL,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
+--
 
 
 -- =========================
 -- QUANTITY MISTAKE
 -- =========================
 
-CREATE TABLE quantity_mistake
-(
-    quantity_mistake_id SERIAL PRIMARY KEY,
-    delivery_list_id    INT REFERENCES delivery_list (delivery_list_id) ON DELETE CASCADE,
-    diff                INT NOT NULL,
-    created_by          INT REFERENCES worker (worker_id),
-    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- CREATE TABLE quantity_mistake
+-- (
+--     quantity_mistake_id SERIAL PRIMARY KEY,
+--     delivery_list_id    INT REFERENCES delivery_list (delivery_list_id) ON DELETE CASCADE,
+--     diff                INT NOT NULL,
+--     created_by          INT REFERENCES worker (worker_id),
+--     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     updated_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
 
 -- =========================
 -- SCAN MISTAKE
 -- =========================
 
-CREATE TABLE scan_mistake
-(
-    scan_mistake_id  SERIAL PRIMARY KEY,
-    event_id         INT REFERENCES event (event_id) ON DELETE CASCADE,
-    delivery_list_id INT REFERENCES delivery_list (delivery_list_id) ON DELETE CASCADE,
-    shipment_list_id INT REFERENCES shipment_list (shipment_list_id) ON DELETE CASCADE,
-    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- CREATE TABLE scan_mistake
+-- (
+--     scan_mistake_id  SERIAL PRIMARY KEY,
+--     event_id         INT REFERENCES event (event_id) ON DELETE CASCADE,
+--     delivery_list_id INT REFERENCES delivery_list (delivery_list_id) ON DELETE CASCADE,
+--     shipment_list_id INT REFERENCES shipment_list (shipment_list_id) ON DELETE CASCADE,
+--     created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
 
 -- =========================
 -- WORKER ROLE SEED
@@ -253,7 +260,7 @@ VALUES ('SUPPLIER'),
 -- =========================
 
 INSERT INTO worker (full_name, username, password_hash, role_id)
-VALUES ('Admin User', 'admin1', 'hash1', 1),
+VALUES ('admin', 'admin1', 'hash1', 1),
        ('Warehouse Worker 1', 'worker1', 'hash2', 2),
        ('Warehouse Worker 2', 'worker2', 'hash3', 2),
        ('admin2 User', 'admin2', 'hash4', 1),
@@ -355,13 +362,9 @@ VALUES ('NEW', 1, 2),
 -- =========================
 
 INSERT INTO shipment
-    (shipment_number, status, created_by, completed_by)
-VALUES (2001, 'NEW', 1, NULL),
-       (2002, 'NEW', 2, NULL),
-       (2003, 'IN_PROGRESS', 3, NULL),
-       (2004, 'COMPLETED', 2, 1),
-       (2005, 'NEW', 1, NULL) ON CONFLICT DO NOTHING;
-
+    (status, created_by, completed_by)
+VALUES ('NEW', 1, NULL),
+       ('NEW', 2, NULL) ON CONFLICT DO NOTHING;
 
 -- =========================
 -- DELIVERY LIST
@@ -375,18 +378,13 @@ VALUES (1, 1, 10, 'ART-001', 1),
        (3, 3, 5, 'ART-004', 3),
        (4, 4, 12, 'ART-005', 2) ON CONFLICT DO NOTHING;
 
-
--- =========================
--- SHIPMENT LIST
--- =========================
-
 INSERT INTO shipment_list
-    (shipment_id, customer_id, supplier_id, amount, article, created_by)
-VALUES (1, 2, 1, 5, 'ART-001', 1),
-       (2, 3, 1, 7, 'ART-002', 2),
-       (3, 4, 2, 10, 'ART-003', 3),
-       (4, 2, 3, 3, 'ART-004', 1),
-       (5, 1, 4, 8, 'ART-005', 2) ON CONFLICT DO NOTHING;
+    (shipment_id, customer_id, expected_amount, article, created_by)
+VALUES (1, 2, 5, 'ART-001', 1),
+       (2, 3, 7, 'ART-002', 2),
+       (1, 4, 10, 'ART-003', 3),
+       (2, 2, 3, 'ART-004', 1),
+       (1, 1, 8, 'ART-005', 2) ON CONFLICT DO NOTHING;
 
 
 -- =========================
@@ -400,18 +398,6 @@ VALUES ('RFID001', 1, 1, 'Item 1', 'ART-001', 1),
        ('RFID003', 3, 1, 'Item 3', 'ART-003', 1),
        ('RFID004', 4, 3, 'Item 4', 'ART-004', 3),
        ('RFID005', 5, 4, 'Item 5', 'ART-005', 2) ON CONFLICT DO NOTHING;
-
-
--- =========================
--- EVENT
--- =========================
-
-INSERT INTO event (rfid_id, article, is_in, error)
-VALUES ('RFID001', 'ART-001', TRUE, NULL),
-       ('RFID002', 'ART-002', TRUE, NULL),
-       ('RFID003', 'ART-003', FALSE, 'Scan error'),
-       ('RFID004', 'ART-004', TRUE, NULL),
-       ('RFID005', 'ART-005', FALSE, NULL) ON CONFLICT DO NOTHING;
 
 -- =========================
 -- EVENT NOTIFY TRIGGER
@@ -440,37 +426,38 @@ AFTER INSERT ON event
 FOR EACH ROW
 EXECUTE FUNCTION notify_event_insert();
 
+
 -- =========================
 -- STATE
 -- =========================
 
-INSERT INTO state (item_id, state_name)
-VALUES (1, 'STORED'),
-       (2, 'IN_TRANSIT'),
-       (3, 'STORED'),
-       (4, 'DAMAGED'),
-       (5, 'STORED') ON CONFLICT DO NOTHING;
+-- INSERT INTO state (item_id, state_name)
+-- VALUES (1, 'STORED'),
+--        (2, 'IN_TRANSIT'),
+--        (3, 'STORED'),
+--        (4, 'DAMAGED'),
+--        (5, 'STORED') ON CONFLICT DO NOTHING;
 
 
 -- =========================
 -- QUANTITY MISTAKE
 -- =========================
 
-INSERT INTO quantity_mistake (delivery_list_id, diff, created_by)
-VALUES (1, 1, 1),
-       (2, -1, 2),
-       (3, 2, 3),
-       (4, -2, 1),
-       (5, 1, 2) ON CONFLICT DO NOTHING;
-
-
--- =========================
--- SCAN MISTAKE
--- =========================
-
-INSERT INTO scan_mistake (event_id, delivery_list_id, shipment_list_id)
-VALUES (1, 1, 1),
-       (2, 2, 2),
-       (3, 3, 3),
-       (4, 4, 4),
-       (5, 5, 5) ON CONFLICT DO NOTHING;
+-- INSERT INTO quantity_mistake (delivery_list_id, diff, created_by)
+-- VALUES (1, 1, 1),
+--        (2, -1, 2),
+--        (3, 2, 3),
+--        (4, -2, 1),
+--        (5, 1, 2) ON CONFLICT DO NOTHING;
+--
+--
+-- -- =========================
+-- -- SCAN MISTAKE
+-- -- =========================
+--
+-- INSERT INTO scan_mistake (event_id, delivery_list_id, shipment_list_id)
+-- VALUES (1, 1, 1),
+--        (2, 2, 2),
+--        (3, 3, 3),
+--        (4, 4, 4),
+--        (5, 5, 5) ON CONFLICT DO NOTHING;

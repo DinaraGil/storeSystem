@@ -61,39 +61,39 @@ func (h *Handlers) CreateDelivery(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, del)
 }
 
-func (h *Handlers) UpdateDelivery(w http.ResponseWriter, r *http.Request) {
-	idStr := chi.URLParam(r, "id")
-	id, err := strconv.Atoi(idStr)
-
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Некорректный id поставки")
-		return
-	}
-
-	var input models.UpdateDeliveryInput
-
-	err = json.NewDecoder(r.Body).Decode(&input)
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Некорректные данные")
-		return
-	}
-
-	if input.Status != nil && strings.TrimSpace(*input.Status) == "" {
-		respondWithError(w, http.StatusBadRequest, "Статус обязательный")
-	}
-	delivery, err := h.deliveryStore.Update(id, input)
-	fmt.Println(delivery, err)
-
-	if err != nil {
-		if strings.Contains(err.Error(), "record not found") {
-			respondWithError(w, http.StatusNotFound, err.Error())
-		} else {
-			respondWithError(w, http.StatusInternalServerError, err.Error())
-		}
-		return
-	}
-	respondWithJSON(w, http.StatusOK, delivery)
-}
+//func (h *Handlers) UpdateDelivery(w http.ResponseWriter, r *http.Request) {
+//	idStr := chi.URLParam(r, "id")
+//	id, err := strconv.Atoi(idStr)
+//
+//	if err != nil {
+//		respondWithError(w, http.StatusBadRequest, "Некорректный id поставки")
+//		return
+//	}
+//
+//	var input models.UpdateDeliveryInput
+//
+//	err = json.NewDecoder(r.Body).Decode(&input)
+//	if err != nil {
+//		respondWithError(w, http.StatusBadRequest, "Некорректные данные")
+//		return
+//	}
+//
+//	if input.Status != nil && strings.TrimSpace(*input.Status) == "" {
+//		respondWithError(w, http.StatusBadRequest, "Статус обязательный")
+//	}
+//	delivery, err := h.deliveryStore.Update(id, input)
+//	fmt.Println(delivery, err)
+//
+//	if err != nil {
+//		if strings.Contains(err.Error(), "record not found") {
+//			respondWithError(w, http.StatusNotFound, err.Error())
+//		} else {
+//			respondWithError(w, http.StatusInternalServerError, err.Error())
+//		}
+//		return
+//	}
+//	respondWithJSON(w, http.StatusOK, delivery)
+//}
 
 func (h *Handlers) GetDeliveryListsByDeliveryID(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
