@@ -9,3 +9,8 @@ type OperationError struct {
 	ObjectID string
 	Error    error
 }
+
+type UploadedFile struct {
+	ObjectID string
+	Link     string
+}

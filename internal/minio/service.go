@@ -12,12 +12,7 @@ import (
 	"github.com/minio/minio-go/v7"
 )
 
-type UploadedFile struct {
-	ObjectID string
-	Link     string
-}
-
-func (m *minioClient) CreateOne(file helpers.FileDataType) (*UploadedFile, error) {
+func (m *minioClient) CreateOne(file helpers.FileDataType) (*helpers.UploadedFile, error) {
 	objectID := uuid.New().String() + file.FileName
 
 	reader := bytes.NewReader(file.Data)
@@ -45,7 +40,7 @@ func (m *minioClient) CreateOne(file helpers.FileDataType) (*UploadedFile, error
 		return nil, err
 	}
 
-	return &UploadedFile{
+	return &helpers.UploadedFile{
 		ObjectID: objectID,
 		Link:     url.String(),
 	}, nil

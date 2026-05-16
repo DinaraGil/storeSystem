@@ -149,7 +149,7 @@ func (s *ShipmentListStore) ProcessScannerEvent(shipmentID int, evt models.Event
 	if evt.Article == nil {
 		return nil, fmt.Errorf("article is nil in event")
 	}
-	
+
 	err = tx.QueryRow(`
 		SELECT shipment_list_id
 		FROM shipment_list
@@ -220,7 +220,6 @@ func (s *ShipmentListStore) ProcessScannerEvent(shipmentID int, evt models.Event
 		return nil, fmt.Errorf("no reserved stock available")
 	}
 
-	// 📦 помечаем товар как отгруженный
 	_, err = tx.Exec(`
 		UPDATE item
 		SET status = 'SHIPPED',
@@ -232,7 +231,6 @@ func (s *ShipmentListStore) ProcessScannerEvent(shipmentID int, evt models.Event
 		return nil, err
 	}
 
-	// 📊 обновляем shipment_list
 	var updated ShipmentListUpdateDTO
 
 	err = tx.QueryRow(`
@@ -273,7 +271,6 @@ func (s *ShipmentListStore) ProcessScannerEvent(shipmentID int, evt models.Event
 		return nil, err
 	}
 
-	// 📦 обновляем shipment
 	_, err = tx.Exec(`
 		UPDATE shipment
 		SET updated_at = CURRENT_TIMESTAMP

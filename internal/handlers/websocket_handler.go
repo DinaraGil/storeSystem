@@ -17,7 +17,7 @@ import (
 type Subscription struct {
 	ObjectID int // delivery_id / shipment_id
 	WorkerID int
-	Conn     *websocket.Conn
+	Conn     Conn
 	Handler  func(evt models.Event) (any, error)
 }
 
@@ -77,7 +77,7 @@ func (h *Handlers) Socket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handlers) removeClient(scannerID int, objectType string, conn *websocket.Conn) {
+func (h *Handlers) removeClient(scannerID int, objectType string, conn Conn) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 

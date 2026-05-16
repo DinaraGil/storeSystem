@@ -64,44 +64,6 @@ func (h *Handlers) CreateShipment(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, sh)
 }
 
-//func (h *Handlers) UpdateShipment(w http.ResponseWriter, r *http.Request) {
-//	idStr := chi.URLParam(r, "id")
-//	id, err := strconv.Atoi(idStr)
-//
-//	if err != nil {
-//		respondWithError(w, http.StatusBadRequest, "Некорректный id отгрузки")
-//		return
-//	}
-//
-//	var input models.UpdateShipmentInput
-//
-//	err = json.NewDecoder(r.Body).Decode(&input)
-//	if err != nil {
-//		respondWithError(w, http.StatusBadRequest, "Некорректные данные")
-//		return
-//	}
-//
-//	if input.Status != nil && strings.TrimSpace(*input.Status) == "" {
-//		respondWithError(w, http.StatusBadRequest, "Статус обязателен")
-//		return
-//	}
-//
-//	shipment, err := h.shipmentStore.Update(id, input)
-//
-//	fmt.Println(shipment, err)
-//
-//	if err != nil {
-//		if strings.Contains(err.Error(), "record not found") {
-//			respondWithError(w, http.StatusNotFound, err.Error())
-//		} else {
-//			respondWithError(w, http.StatusInternalServerError, err.Error())
-//		}
-//		return
-//	}
-//
-//	respondWithJSON(w, http.StatusOK, shipment)
-//}
-
 func (h *Handlers) GetShipmentListsByShipmentID(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
