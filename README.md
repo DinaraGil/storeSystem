@@ -1,1 +1,1 @@
-![tests](https://github.com/DinaraGil/storeSystem/actions/workflows/tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/DinaraGil/storeSystem/branch/main/graph/badge.svg)](https://codecov.io)
