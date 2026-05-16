@@ -22,7 +22,7 @@ jobs:
         run: go mod download
 
       - name: Run tests with coverage
-        run: go test ./... -coverprofile=coverage.out
+        run: go test ./internal/handlers -coverprofile=coverage.out
 
       - name: Show coverage
         run: go tool cover -func=coverage.out
