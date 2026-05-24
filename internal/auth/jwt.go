@@ -2,6 +2,7 @@ package auth
 
 import (
 	"errors"
+	"storeSystem/internal/models"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -9,15 +10,8 @@ import (
 
 var jwtSecret = []byte("SUPER_SECRET_KEY_CHANGE_THIS")
 
-type Claims struct {
-	UserID   int    `json:"user_id"`
-	RoleID   int    `json:"role_id"`
-	Username string `json:"username"`
-	jwt.RegisteredClaims
-}
-
 func GenerateToken(userID int, roleId int, username string) (string, error) {
-	claims := Claims{
+	claims := models.Claims{
 		UserID:   userID,
 		RoleID:   roleId,
 		Username: username,
@@ -34,10 +28,10 @@ func GenerateToken(userID int, roleId int, username string) (string, error) {
 	return token.SignedString(jwtSecret)
 }
 
-func ParseToken(tokenString string) (*Claims, error) {
+func ParseToken(tokenString string) (*models.Claims, error) {
 	token, err := jwt.ParseWithClaims(
 		tokenString,
-		&Claims{},
+		&models.Claims{},
 		func(token *jwt.Token) (interface{}, error) {
 			return jwtSecret, nil
 		},
@@ -47,7 +41,7 @@ func ParseToken(tokenString string) (*Claims, error) {
 		return nil, err
 	}
 
-	claims, ok := token.Claims.(*Claims)
+	claims, ok := token.Claims.(*models.Claims)
 	if !ok || !token.Valid {
 		return nil, errors.New("invalid token")
 	}

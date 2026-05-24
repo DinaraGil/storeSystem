@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"storeSystem/internal/auth"
+	"storeSystem/internal/models"
 )
 
 type contextKey string
@@ -35,8 +36,8 @@ func (h *Handlers) AuthMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func GetUserClaimsFromContext(ctx context.Context) (*auth.Claims, bool) {
-	claims, ok := ctx.Value(UserClaimsKey).(*auth.Claims)
+func GetUserClaimsFromContext(ctx context.Context) (*models.Claims, bool) {
+	claims, ok := ctx.Value(UserClaimsKey).(*models.Claims)
 	return claims, ok
 }
 

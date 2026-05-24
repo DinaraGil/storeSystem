@@ -74,40 +74,6 @@ func (s *DeliveryStore) Create(input models.CreateDeliveryInput) (*models.Delive
 	return &del, nil
 }
 
-//
-//func (s *DeliveryStore) Update(delivery_id int, input models.UpdateDeliveryInput) (*models.Delivery, error) {
-//	del, err := s.GetByID(delivery_id)
-//	fmt.Println("get by id", del, err)
-//	if err != nil {
-//		return nil, err
-//	}
-//	if input.Status != nil {
-//		del.Status = *input.Status
-//	}
-//	if input.PlannedArrivalAt != nil {
-//		del.PlannedArrivalAt = *input.PlannedArrivalAt
-//	}
-//	if input.AcceptedAt != nil {
-//		del.AcceptedAt = input.AcceptedAt
-//	}
-//	if input.AcceptedBy != nil {
-//		del.AcceptedBy = *input.AcceptedBy
-//	}
-//	del.UpdatedAt = time.Now()
-//
-//	query := `UPDATE delivery SET status = $1, planned_arrival_at= $2, accepted_at = $3, accepted_by=$4, updated_at=$5
-//	WHERE delivery_id = $6 returning delivery_id, status, planned_arrival_at, accepted_at, accepted_by, updated_at;`
-//
-//	var updatedDel models.Delivery
-//
-//	err = s.db.QueryRowx(query, del.Status, del.PlannedArrivalAt, del.AcceptedAt, del.AcceptedBy, del.UpdatedAt, del.ID).StructScan(&updatedDel)
-//	fmt.Println("query rowx", updatedDel, err)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return &updatedDel, nil
-//}
-
 func (s *DeliveryStore) CompleteDelivery(deliveryID int) error {
 	_, err := s.db.Exec(`
 		UPDATE delivery

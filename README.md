@@ -1,0 +1,1 @@
+![tests](https://github.com/DinaraGil/storeSystem/actions/workflows/tests.yml/badge.svg)

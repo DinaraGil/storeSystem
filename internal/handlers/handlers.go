@@ -1,46 +1,45 @@
+//go:build !nocover
+// +build !nocover
+
 package handlers
 
 import (
 	"encoding/json"
 	"net/http"
-	"storeSystem/internal/database"
-	"storeSystem/internal/minio"
 	"sync"
-
-	"github.com/gorilla/websocket"
 )
 
 type scanSubscription struct {
 	DeliveryID int
 	WorkerID   int
-	Conn       *websocket.Conn
+	Conn       Conn
 }
 type Handlers struct {
-	itemStore         *database.ItemStore
-	workerStore       *database.WorkerStore
-	deliveryListStore *database.DeliveryListStore
-	deliveryStore     *database.DeliveryStore
-	shipmentListStore *database.ShipmentListStore
-	shipmentStore     *database.ShipmentStore
-	stockStore        *database.StockStore
-	counterpartyStore *database.CounterpartyStore
-	minioService      minio.Client
-	reportStore       *database.ReportStore
+	itemStore         ItemStore
+	workerStore       WorkerStore
+	deliveryListStore DeliveryListStore
+	deliveryStore     DeliveryStore
+	shipmentListStore ShipmentListStore
+	shipmentStore     ShipmentStore
+	stockStore        StockStore
+	counterpartyStore CounterpartyStore
+	minioService      MinioService
+	reportStore       ReportStore
 	mu                sync.Mutex
 	clients           map[int]map[string][]Subscription
 }
 
 func NewHandlers(
-	itemStore *database.ItemStore,
-	workerStore *database.WorkerStore,
-	deliveryListStore *database.DeliveryListStore,
-	deliveryStore *database.DeliveryStore,
-	shipmentListStore *database.ShipmentListStore,
-	shipmentStore *database.ShipmentStore,
-	counterpartyStore *database.CounterpartyStore,
-	stockStore *database.StockStore,
-	minioService minio.Client,
-	reportStore *database.ReportStore,
+	itemStore ItemStore,
+	workerStore WorkerStore,
+	deliveryListStore DeliveryListStore,
+	deliveryStore DeliveryStore,
+	shipmentListStore ShipmentListStore,
+	shipmentStore ShipmentStore,
+	counterpartyStore CounterpartyStore,
+	stockStore StockStore,
+	minioService MinioService,
+	reportStore ReportStore,
 ) *Handlers {
 	return &Handlers{
 		itemStore:         itemStore,

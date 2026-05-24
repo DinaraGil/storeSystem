@@ -1,0 +1,3564 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>api: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">storeSystem/cmd/api/main.go (0.0%)</option>
+				
+				<option value="file1">storeSystem/internal/auth/jwt.go (0.0%)</option>
+				
+				<option value="file2">storeSystem/internal/auth/password.go (0.0%)</option>
+				
+				<option value="file3">storeSystem/internal/config/config.go (0.0%)</option>
+				
+				<option value="file4">storeSystem/internal/database/counterparty.go (0.0%)</option>
+				
+				<option value="file5">storeSystem/internal/database/database.go (0.0%)</option>
+				
+				<option value="file6">storeSystem/internal/database/delivery.go (0.0%)</option>
+				
+				<option value="file7">storeSystem/internal/database/delivery_list.go (0.0%)</option>
+				
+				<option value="file8">storeSystem/internal/database/item.go (0.0%)</option>
+				
+				<option value="file9">storeSystem/internal/database/mocks/counterparty_store_mock.go (0.0%)</option>
+				
+				<option value="file10">storeSystem/internal/database/mocks/delivery_list_store_mock.go (0.0%)</option>
+				
+				<option value="file11">storeSystem/internal/database/mocks/delivery_store_mock.go (0.0%)</option>
+				
+				<option value="file12">storeSystem/internal/database/mocks/item_store_mock.go (0.0%)</option>
+				
+				<option value="file13">storeSystem/internal/database/mocks/minio_store_mock.go (0.0%)</option>
+				
+				<option value="file14">storeSystem/internal/database/mocks/report_store_mock.go (0.0%)</option>
+				
+				<option value="file15">storeSystem/internal/database/mocks/shipment_list_mock.go (0.0%)</option>
+				
+				<option value="file16">storeSystem/internal/database/mocks/shipment_store_mock.go (0.0%)</option>
+				
+				<option value="file17">storeSystem/internal/database/mocks/stock_store_mock.go (0.0%)</option>
+				
+				<option value="file18">storeSystem/internal/database/mocks/worker_store_mock.go (0.0%)</option>
+				
+				<option value="file19">storeSystem/internal/database/report.go (0.0%)</option>
+				
+				<option value="file20">storeSystem/internal/database/shipment.go (0.0%)</option>
+				
+				<option value="file21">storeSystem/internal/database/shipment_list.go (0.0%)</option>
+				
+				<option value="file22">storeSystem/internal/database/stock.go (0.0%)</option>
+				
+				<option value="file23">storeSystem/internal/database/worker.go (0.0%)</option>
+				
+				<option value="file24">storeSystem/internal/handlers/auth_handler.go (69.0%)</option>
+				
+				<option value="file25">storeSystem/internal/handlers/counterparty_handler.go (92.3%)</option>
+				
+				<option value="file26">storeSystem/internal/handlers/delivery_handler.go (91.7%)</option>
+				
+				<option value="file27">storeSystem/internal/handlers/delivery_list_handler.go (54.2%)</option>
+				
+				<option value="file28">storeSystem/internal/handlers/handlers.go (80.0%)</option>
+				
+				<option value="file29">storeSystem/internal/handlers/item_handler.go (95.7%)</option>
+				
+				<option value="file30">storeSystem/internal/handlers/middleware.go (46.2%)</option>
+				
+				<option value="file31">storeSystem/internal/handlers/report_handler.go (54.2%)</option>
+				
+				<option value="file32">storeSystem/internal/handlers/shipment_handler.go (95.8%)</option>
+				
+				<option value="file33">storeSystem/internal/handlers/shipment_list_handler.go (56.9%)</option>
+				
+				<option value="file34">storeSystem/internal/handlers/stock_handler.go (100.0%)</option>
+				
+				<option value="file35">storeSystem/internal/handlers/websocket_handler.go (28.0%)</option>
+				
+				<option value="file36">storeSystem/internal/logic/file_handler.go (0.0%)</option>
+				
+				<option value="file37">storeSystem/internal/minio/client.go (0.0%)</option>
+				
+				<option value="file38">storeSystem/internal/minio/service.go (0.0%)</option>
+				
+				<option value="file39">storeSystem/internal/validation/validator.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "log"
+        "net/http"
+        "os"
+        "storeSystem/internal/config"
+        "storeSystem/internal/database"
+        "storeSystem/internal/handlers"
+        "storeSystem/internal/minio"
+        "time"
+
+        "github.com/go-chi/chi/v5"
+        "github.com/go-chi/chi/v5/middleware"
+)
+
+func main() <span class="cov0" title="0">{
+        databaseURL := os.Getenv("DATABASE_URL")
+        if databaseURL == "" </span><span class="cov0" title="0">{
+                databaseURL = "postgres://storageuser:storagepass@localhost:5433/storagedb?sslmode=disable"
+        }</span>
+        <span class="cov0" title="0">serverPort := os.Getenv("SERVER_PORT")
+        if serverPort == "" </span><span class="cov0" title="0">{
+                serverPort = "8080"
+        }</span>
+
+        <span class="cov0" title="0">config.LoadConfig()
+
+        minioClient := minio.NewMinioClient()
+        err := minioClient.InitMinio()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Ошибка инициализации Minio: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">log.Printf("starting server on port %s", serverPort)
+        db, err := database.Connect(databaseURL)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal(err)
+        }</span>
+        <span class="cov0" title="0">defer db.Close()
+
+        log.Println("успешно подключено к бд")
+
+        itemStore := database.NewItemStore(db)
+        workerStore := database.NewWorkerStore(db)
+        deliveryListStore := database.NewDeliveryListStore(db)
+        deliveryStore := database.NewDeliveryStore(db)
+        shipmentListStore := database.NewShipmentListStore(db)
+        shipmentStore := database.NewShipmentStore(db)
+        counterpartyStore := database.NewCounterpartyStore(db)
+        stockStore := database.NewStockStore(db)
+        reportStore := database.NewReportStore(db)
+
+        handler := handlers.NewHandlers(
+                itemStore,
+                workerStore,
+                deliveryListStore,
+                deliveryStore,
+                shipmentListStore,
+                shipmentStore,
+                counterpartyStore,
+                stockStore,
+                minioClient,
+                reportStore,
+        )
+
+        go handler.ListenEvents(databaseURL)
+
+        router := chi.NewRouter()
+
+        router.Use(middleware.Logger)
+        router.Use(middleware.Recoverer)
+        router.Use(middleware.Timeout(60 * time.Second))
+
+        router.Post("/auth/login", handler.Login)
+
+        router.Route("/workers", func(r chi.Router) </span><span class="cov0" title="0">{
+                r.Post("/", handler.CreateWorker) // POST /workers
+        }</span>)
+
+        <span class="cov0" title="0">router.Group(func(router chi.Router) </span><span class="cov0" title="0">{
+                router.Use(handler.AuthMiddleware)
+
+                router.Route("/items", func(r chi.Router) </span><span class="cov0" title="0">{
+                        r.Get("/", handler.GetAllItems)                               // GET /items
+                        r.With(handlers.RequireAdmin()).Post("/", handler.CreateItem) // POST /items
+                        r.Get("/{id}", handler.GetItemByID)                           // GET /items/1
+                        r.Put("/{id}", handler.UpdateItem)                            // PUT /items/1
+                }</span>)
+
+                <span class="cov0" title="0">router.Route("/delivery_lists", func(r chi.Router) </span><span class="cov0" title="0">{
+                        r.Get("/", handler.GetAllDeliveryLists)
+                        r.With(handlers.RequireAdmin()).Post("/", handler.CreateDeliveryList)
+                        r.Get("/{id}", handler.GetDeliveryListByID)
+                        r.With(handlers.RequireAdmin()).Post("/upload", handler.UploadDeliveryList)
+                }</span>)
+
+                <span class="cov0" title="0">router.Route("/deliveries", func(r chi.Router) </span><span class="cov0" title="0">{
+                        r.Get("/", handler.GetAllDeliveries)
+                        r.With(handlers.RequireAdmin()).Post("/", handler.CreateDelivery)
+                        r.Get("/{id}", handler.GetDeliveryByID)
+                        r.Get("/{id}/lists", handler.GetDeliveryListsByDeliveryID)
+                        r.Put("/{id}/complete", handler.CompleteDelivery)
+                }</span>)
+
+                <span class="cov0" title="0">router.Route("/shipments", func(r chi.Router) </span><span class="cov0" title="0">{
+                        r.Get("/", handler.GetAllShipments)
+                        r.With(handlers.RequireAdmin()).Post("/", handler.CreateShipment)
+                        r.Get("/{id}", handler.GetShipmentByID)
+                        r.Get("/{id}/lists", handler.GetShipmentListsByShipmentID)
+                        r.Put("/{id}/complete", handler.CompleteShipment)
+                }</span>)
+
+                <span class="cov0" title="0">router.Route("/shipment_lists", func(r chi.Router) </span><span class="cov0" title="0">{
+                        r.Get("/", handler.GetAllShipmentLists)
+                        r.With(handlers.RequireAdmin()).Post("/", handler.CreateShipmentList)
+                        r.Get("/{id}", handler.GetShipmentListByID)
+                        r.With(handlers.RequireAdmin()).Post("/upload", handler.UploadShipmentList)
+                }</span>)
+
+                <span class="cov0" title="0">router.Route("/auth", func(r chi.Router) </span><span class="cov0" title="0">{
+                        r.Get("/me", handler.Me)
+                        r.Post("/logout", handler.Logout)
+                }</span>)
+
+                <span class="cov0" title="0">router.Get("/ws/{object_type}/{object_id}/scanners/{scanner_id}", handler.Socket)
+
+                router.With(handlers.RequireAdmin()).Route("/counterparties", func(r chi.Router) </span><span class="cov0" title="0">{
+                        r.Get("/", handler.GetAllCounterparties)
+                        r.Get("/{id}", handler.GetCounterpartyByID)
+                        r.Post("/", handler.CreateCounterparty)
+                }</span>)
+
+                <span class="cov0" title="0">router.Get("/stocks", handler.GetAllStocks)
+
+                router.With(handlers.RequireAdmin()).Post("/reports/new", handler.GenerateReport)
+                router.With(handlers.RequireAdmin()).Get("/reports", handler.GetUsersReports)</span>
+        })
+
+        //cors middleware
+
+        <span class="cov0" title="0">serverAddr := ":" + serverPort
+
+        err = http.ListenAndServe(serverAddr, router)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal(err)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package auth
+
+import (
+        "errors"
+        "storeSystem/internal/models"
+        "time"
+
+        "github.com/golang-jwt/jwt/v5"
+)
+
+var jwtSecret = []byte("SUPER_SECRET_KEY_CHANGE_THIS")
+
+func GenerateToken(userID int, roleId int, username string) (string, error) <span class="cov0" title="0">{
+        claims := models.Claims{
+                UserID:   userID,
+                RoleID:   roleId,
+                Username: username,
+                RegisteredClaims: jwt.RegisteredClaims{
+                        ExpiresAt: jwt.NewNumericDate(
+                                time.Now().Add(24 * time.Hour),
+                        ),
+                        IssuedAt: jwt.NewNumericDate(time.Now()),
+                },
+        }
+
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+        return token.SignedString(jwtSecret)
+}</span>
+
+func ParseToken(tokenString string) (*models.Claims, error) <span class="cov0" title="0">{
+        token, err := jwt.ParseWithClaims(
+                tokenString,
+                &amp;models.Claims{},
+                func(token *jwt.Token) (interface{}, error) </span><span class="cov0" title="0">{
+                        return jwtSecret, nil
+                }</span>,
+        )
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">claims, ok := token.Claims.(*models.Claims)
+        if !ok || !token.Valid </span><span class="cov0" title="0">{
+                return nil, errors.New("invalid token")
+        }</span>
+
+        <span class="cov0" title="0">return claims, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package auth
+
+import (
+        "strings"
+
+        "golang.org/x/crypto/bcrypt"
+)
+
+func HashPassword(password string) (string, error) <span class="cov0" title="0">{
+        hash, err := bcrypt.GenerateFromPassword(
+                []byte(password),
+                bcrypt.DefaultCost,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov0" title="0">return string(hash), nil</span>
+}
+
+func CheckPassword(hash string, password string) error <span class="cov0" title="0">{
+
+        return bcrypt.CompareHashAndPassword(
+                []byte(strings.TrimSpace(hash)),
+                []byte(password),
+        )
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package config
+
+import (
+        "log"
+        "os"
+        "strconv"
+
+        "github.com/joho/godotenv"
+)
+
+type Config struct {
+        Port              string
+        MinioEndpoint     string
+        BucketName        string
+        MinioRootUser     string
+        MinioRootPassword string
+        MinioUseSSL       bool
+}
+
+var AppConfig *Config
+
+func LoadConfig() <span class="cov0" title="0">{
+        err := godotenv.Load()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Error loading .env file")
+        }</span>
+
+        <span class="cov0" title="0">AppConfig = &amp;Config{
+                Port: getEnv("PORT", "8080"),
+
+                MinioEndpoint:     getEnv("MINIO_ENDPOINT", "localhost:9000"),
+                BucketName:        getEnv("MINIO_BUCKET_NAME", "defaultBucket"),
+                MinioRootUser:     getEnv("MINIO_ROOT_USER", "root"),
+                MinioRootPassword: getEnv("MINIO_ROOT_PASSWORD", "root"),
+                MinioUseSSL:       getEnvAsBool("MINIO_USE_SSL", false),
+        }</span>
+}
+
+func getEnv(key string, defaultValue string) string <span class="cov0" title="0">{
+        if value, exists := os.LookupEnv(key); exists </span><span class="cov0" title="0">{
+                return value
+        }</span>
+        <span class="cov0" title="0">return defaultValue</span>
+}
+
+func getEnvAsInt(key string, defaultValue int) int <span class="cov0" title="0">{
+        if valueStr := getEnv(key, ""); valueStr != "" </span><span class="cov0" title="0">{
+                if value, err := strconv.Atoi(valueStr); err == nil </span><span class="cov0" title="0">{
+                        return value
+                }</span>
+        }
+        <span class="cov0" title="0">return defaultValue</span>
+}
+
+func getEnvAsBool(key string, defaultValue bool) bool <span class="cov0" title="0">{
+        if valueStr := getEnv(key, ""); valueStr != "" </span><span class="cov0" title="0">{
+                if value, err := strconv.ParseBool(valueStr); err == nil </span><span class="cov0" title="0">{
+                        return value
+                }</span>
+        }
+        <span class="cov0" title="0">return defaultValue</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package database
+
+import (
+        "database/sql"
+        "fmt"
+        "storeSystem/internal/models"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type CounterpartyStore struct {
+        db *sqlx.DB
+}
+
+func NewCounterpartyStore(db *sqlx.DB) *CounterpartyStore <span class="cov0" title="0">{
+        return &amp;CounterpartyStore{db: db}
+}</span>
+
+func (s *CounterpartyStore) GetAll() ([]models.Counterparty, error) <span class="cov0" title="0">{
+        var counterparties []models.Counterparty
+        query := `SELECT counterparty_id, full_name, legal_form, inn, kpp, ogrn, legal_address, bank_name, bik, bank_account_number, contact_person, phone, role_id FROM counterparty;`
+
+        err := s.db.Select(&amp;counterparties, query)
+        fmt.Println(err, counterparties)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return counterparties, nil</span>
+}
+
+func (s *CounterpartyStore) GetByID(id int) (*models.Counterparty, error) <span class="cov0" title="0">{
+        var counterparty models.Counterparty
+        query := `SELECT * FROM counterparty where counterparty_id=$1;`
+
+        err := s.db.Get(&amp;counterparty, query, id)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("counterparty with id %d not found", id)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;counterparty, nil</span>
+}
+
+func (s *CounterpartyStore) Create(input models.CreateCounterpartyInput) (*models.Counterparty, error) <span class="cov0" title="0">{
+        var counterparty models.Counterparty
+
+        query := `
+        INSERT INTO counterparty (full_name, legal_form, inn, kpp, ogrn, legal_address, bank_name, bik, bank_account_number, contact_person, phone, role_id)
+        VALUES ($1, $2, $3, $4, $5 ,$6, $7, $8, $9, $10, $11, $12)
+        returning counterparty_id, full_name, legal_form, inn, kpp, ogrn, legal_address, bank_name, bik, bank_account_number, contact_person, phone, role_id;`
+
+        err := s.db.QueryRowx(query, input.FullName, input.LegalForm, input.INN, input.KPP, input.OGRN, input.LegalAddress, input.BankName, input.BIK, input.BankAccountNumber, input.ContactPerson, input.Phone, input.RoleId).StructScan(&amp;counterparty)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;counterparty, nil</span>
+}
+
+//func (s *CounterpartyStore) Update(counterparty_id int, input models.UpdateCounterpartyInput) (*models.Counterparty, error) {
+//        counterparty, err := s.GetByID(counterparty_id)
+//        if err != nil {
+//                return nil, err
+//        }
+//
+//        query := `UPDATE item SET delivery_list_id = $1, supplier_id = $2, name= $3, article = $4, updated_at=$5
+//        WHERE item_id = $6 returning item_id, delivery_list_id, supplier_id, name, article, updated_at;`
+//
+//        var updatedItem models.Item
+//
+//        err = s.db.QueryRowx(query, item.DeliveryListID, item.SupplierID, item.Name, item.Article, item.UpdatedAt, item.ID).StructScan(&amp;updatedItem)
+//        if err != nil {
+//                return nil, err
+//        }
+//        return &amp;updatedItem, nil
+//}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package database
+
+import (
+        "github.com/jmoiron/sqlx"
+        _ "github.com/lib/pq"
+)
+
+func Connect(databaseURL string) (*sqlx.DB, error) <span class="cov0" title="0">{
+        db, err := sqlx.Connect("postgres", databaseURL)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">db.SetMaxOpenConns(20)
+        db.SetMaxIdleConns(5)
+
+        return db, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package database
+
+import (
+        "database/sql"
+        "fmt"
+        "storeSystem/internal/models"
+        "time"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type DeliveryStore struct {
+        db *sqlx.DB
+}
+
+func NewDeliveryStore(db *sqlx.DB) *DeliveryStore <span class="cov0" title="0">{
+        return &amp;DeliveryStore{db: db}
+}</span>
+
+func (s *DeliveryStore) GetAll() ([]models.Delivery, error) <span class="cov0" title="0">{
+        var del []models.Delivery
+        query := `SELECT * FROM delivery order by delivery_id asc;`
+
+        err := s.db.Select(&amp;del, query)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return del, nil</span>
+}
+
+func (s *DeliveryStore) GetErrorDeliveries() ([]models.Delivery, error) <span class="cov0" title="0">{
+        var del []models.Delivery
+        query := `SELECT * FROM delivery WHERE status = 'ERROR' order by delivery_id asc;`
+
+        err := s.db.Select(&amp;del, query)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return del, nil</span>
+}
+
+func (s *DeliveryStore) GetByID(id int) (*models.Delivery, error) <span class="cov0" title="0">{
+        var del models.Delivery
+        query := `SELECT * FROM delivery where delivery_id=$1;`
+
+        err := s.db.Get(&amp;del, query, id)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("del with id %d not found", id)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;del, nil</span>
+}
+
+func (s *DeliveryStore) Create(input models.CreateDeliveryInput) (*models.Delivery, error) <span class="cov0" title="0">{
+        var del models.Delivery
+
+        query := `
+        INSERT INTO delivery (status, accepted_at, created_by, accepted_by, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5 ,$6, $7)
+        returning delivery_id, status, accepted_at, created_by, accepted_by, created_at, updated_at;`
+
+        now := time.Now()
+
+        err := s.db.QueryRowx(query, input.Status, input.AcceptedAt, input.CreatedBy, input.AcceptedBy, now, now).StructScan(&amp;del)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;del, nil</span>
+}
+
+func (s *DeliveryStore) CompleteDelivery(deliveryID int) error <span class="cov0" title="0">{
+        _, err := s.db.Exec(`
+                UPDATE delivery
+                SET status = CASE
+                        WHEN NOT EXISTS (
+                                SELECT 1
+                                FROM delivery_list
+                                WHERE delivery_id = $1
+                                  AND status != 'COMPLETED'
+                        )
+                        THEN 'COMPLETED'
+                    WHEN NOT EXISTS (
+                                SELECT 1
+                                FROM delivery_list
+                                WHERE delivery_id = $1
+                                  AND status != 'NEW'
+                        )
+                    THEN 'NEW'
+                        ELSE 'ERROR'
+                END,
+                updated_at = CURRENT_TIMESTAMP
+                WHERE delivery_id = $1
+        `, deliveryID)
+        fmt.Println(err)
+        return err
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package database
+
+import (
+        "database/sql"
+        "fmt"
+        "storeSystem/internal/models"
+        "time"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type DeliveryListStore struct {
+        db *sqlx.DB
+}
+
+func NewDeliveryListStore(db *sqlx.DB) *DeliveryListStore <span class="cov0" title="0">{
+        return &amp;DeliveryListStore{db: db}
+}</span>
+
+func (s *DeliveryListStore) GetAll() ([]models.DeliveryList, error) <span class="cov0" title="0">{
+        var delLists []models.DeliveryList
+        query := `SELECT * FROM delivery_list order by created_at desc;`
+
+        err := s.db.Select(&amp;delLists, query)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return delLists, nil</span>
+}
+
+func (s *DeliveryListStore) GetByID(id int) (*models.DeliveryList, error) <span class="cov0" title="0">{
+        var delList models.DeliveryList
+        query := `SELECT * FROM delivery_list where delivery_list_id=$1;`
+
+        err := s.db.Get(&amp;delList, query, id)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("delList with id %d not found", id)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;delList, nil</span>
+}
+
+func (s *DeliveryListStore) GetByDeliveryID(id int) ([]models.DeliveryList, error) <span class="cov0" title="0">{
+        var delLists []models.DeliveryList
+        query := `SELECT * FROM delivery_list where delivery_id=$1 ORDER BY delivery_list_id;`
+
+        err := s.db.Select(&amp;delLists, query, id)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("delList with delivery id %d not found", id)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return delLists, nil</span>
+}
+
+func (s *DeliveryListStore) Create(input models.CreateDeliveryListInput) (*models.DeliveryList, error) <span class="cov0" title="0">{
+        var delList models.DeliveryList
+
+        query := `
+        INSERT INTO delivery_list (delivery_id, supplier_id, expected_amount, article, created_by, updated_by, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5 ,$6, $7, $8)
+        returning delivery_list_id, delivery_id, supplier_id, expected_amount, status, article, created_by, updated_by, created_at, updated_at;`
+
+        now := time.Now()
+
+        err := s.db.QueryRowx(query, input.DeliveryId, input.SupplierId, input.ExpectedAmount, input.Article, input.CreatedBy, input.UpdatedBy, now, now).StructScan(&amp;delList)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;delList, nil</span>
+}
+
+type DeliveryListUpdateDTO struct {
+        DeliveryListID int       `json:"delivery_list_id"`
+        DeliveryID     int       `json:"delivery_id"`
+        SupplierID     int       `json:"supplier_id"`
+        ExpectedAmount int       `json:"expected_amount"`
+        RealAmount     int       `json:"real_amount"`
+        Article        string    `json:"article"`
+        CreatedBy      int       `json:"created_by"`
+        UpdatedBy      int       `json:"updated_by"`
+        CreatedAt      time.Time `json:"created_at_at"`
+        UpdatedAt      time.Time `json:"updated_at"`
+        Status         string    `json:"status"`
+}
+
+func (s *DeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event, workerID int) (*DeliveryListUpdateDTO, error) <span class="cov0" title="0">{
+        if evt.Error != nil &amp;&amp; *evt.Error != "" </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("error in event")
+        }</span>
+
+        <span class="cov0" title="0">if evt.IsIn == nil || !*evt.IsIn </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("the rfid is out")
+        }</span>
+
+        <span class="cov0" title="0">tx, err := s.db.Begin()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer tx.Rollback()
+
+        var supplierID int
+        var deliveryListID int
+
+        if evt.Article == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("article is nil in event")
+        }</span>
+
+        <span class="cov0" title="0">err = tx.QueryRow(`
+                SELECT delivery_list_id, supplier_id
+                FROM delivery_list
+                WHERE delivery_id = $1 AND article = $2
+        `, deliveryID, *evt.Article).Scan(&amp;deliveryListID, &amp;supplierID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("delivery_list not found for delivery_id=%d article=%s", deliveryID, *evt.Article)
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+
+        <span class="cov0" title="0">var existingItemID int
+        err = tx.QueryRow(`
+                SELECT item_id
+                FROM item
+                WHERE rfid_id = $1
+        `, evt.RfidId).Scan(&amp;existingItemID)
+
+        if err == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("item already exist")
+        }</span>
+        <span class="cov0" title="0">if err != sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">var itemID int
+        err = tx.QueryRow(`
+                INSERT INTO item (
+                        rfid_id, delivery_list_id, supplier_id, name, article, created_by, updated_by
+                )
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING item_id
+        `, evt.RfidId, deliveryListID, supplierID, "aboba", *evt.Article, workerID, workerID).Scan(&amp;itemID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">var updated DeliveryListUpdateDTO
+
+        err = tx.QueryRow(`
+                UPDATE delivery_list
+                SET real_amount = real_amount + 1,
+                    status = CASE
+                        WHEN real_amount + 1 = expected_amount THEN 'COMPLETED'
+                        WHEN real_amount + 1 &gt; expected_amount THEN 'OVERMUCH'
+                        ELSE 'NOT_ENOUGH'
+                    END,
+                    updated_at = CURRENT_TIMESTAMP,
+                    updated_by = $1
+                WHERE delivery_list_id = $2
+                RETURNING 
+                        delivery_list_id,
+                        delivery_id,
+                        supplier_id,
+                        expected_amount,
+                        real_amount,
+                        updated_by,
+                        article,
+                        status,
+                        updated_at
+        `, workerID, deliveryListID).Scan(
+                &amp;updated.DeliveryListID,
+                &amp;updated.DeliveryID,
+                &amp;updated.SupplierID,
+                &amp;updated.ExpectedAmount,
+                &amp;updated.RealAmount,
+                &amp;updated.UpdatedBy,
+                &amp;updated.Article,
+                &amp;updated.Status,
+                &amp;updated.UpdatedAt,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">_, err = tx.Exec(`
+                INSERT INTO stock_balance (article, quantity, updated_at)
+                VALUES ($1, 1, CURRENT_TIMESTAMP)
+                ON CONFLICT (article)
+                DO UPDATE SET
+                        quantity = stock_balance.quantity + 1,
+                        updated_at = CURRENT_TIMESTAMP
+        `, *evt.Article)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">_, err = tx.Exec(`
+                UPDATE delivery
+                SET accepted_by = $1,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE delivery_id = $2;`,
+                workerID, deliveryID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">if err = tx.Commit(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;updated, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package database
+
+import (
+        "database/sql"
+        "fmt"
+        "storeSystem/internal/models"
+        "time"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type ItemStore struct {
+        db *sqlx.DB
+}
+
+func NewItemStore(db *sqlx.DB) *ItemStore <span class="cov0" title="0">{
+        return &amp;ItemStore{db: db}
+}</span>
+
+func (s *ItemStore) GetAll() ([]models.Item, error) <span class="cov0" title="0">{
+        var items []models.Item
+        query := `SELECT * FROM item order by created_at desc;`
+
+        err := s.db.Select(&amp;items, query)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return items, nil</span>
+}
+
+func (s *ItemStore) GetByID(id int) (*models.Item, error) <span class="cov0" title="0">{
+        var item models.Item
+        query := `SELECT item_id, rfid_id, delivery_list_id, supplier_id,
+       name, article, created_by, updated_by,
+       created_at, updated_at FROM item where item_id=$1;`
+
+        err := s.db.Get(&amp;item, query, id)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("item with id %d not found", id)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;item, nil</span>
+}
+
+func (s *ItemStore) Create(input models.CreateItemInput) (*models.Item, error) <span class="cov0" title="0">{
+        var item models.Item
+
+        query := `
+        INSERT INTO item (rfid_id, delivery_list_id, supplier_id, name, article, created_by, updated_by, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5 ,$6, $7, $8, $9)
+        returning item_id, rfid_id, delivery_list_id, supplier_id, name, article, created_by, updated_by, created_at, updated_at;`
+
+        now := time.Now()
+
+        err := s.db.QueryRowx(query, input.RfidID, input.DeliveryListID, input.SupplierID, input.Name, input.Article, input.CreatedBy, input.UpdatedBy, now, now).StructScan(&amp;item)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;item, nil</span>
+}
+
+func (s *ItemStore) Update(item_id int, input models.UpdateItemInput) (*models.Item, error) <span class="cov0" title="0">{
+        item, err := s.GetByID(item_id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">if input.DeliveryListID != nil </span><span class="cov0" title="0">{
+                item.DeliveryListID = *input.DeliveryListID
+        }</span>
+        <span class="cov0" title="0">if input.SupplierID != nil </span><span class="cov0" title="0">{
+                item.SupplierID = *input.SupplierID
+        }</span>
+        <span class="cov0" title="0">if input.Name != nil </span><span class="cov0" title="0">{
+                item.Name = *input.Name
+        }</span>
+        <span class="cov0" title="0">if input.Article != nil </span><span class="cov0" title="0">{
+                item.Article = *input.Article
+        }</span>
+        <span class="cov0" title="0">item.UpdatedAt = time.Now()
+
+        query := `UPDATE item SET delivery_list_id = $1, supplier_id = $2, name= $3, article = $4, updated_at=$5
+        WHERE item_id = $6 returning item_id, delivery_list_id, supplier_id, name, article, updated_at;`
+
+        var updatedItem models.Item
+
+        err = s.db.QueryRowx(query, item.DeliveryListID, item.SupplierID, item.Name, item.Article, item.UpdatedAt, item.ID).StructScan(&amp;updatedItem)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;updatedItem, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package mocks
+
+import (
+        "errors"
+
+        "storeSystem/internal/models"
+)
+
+type MockCounterpartyStore struct{}
+
+func (m *MockCounterpartyStore) GetAll() ([]models.Counterparty, error) <span class="cov0" title="0">{
+        return []models.Counterparty{
+                {
+                        ID:       1,
+                        FullName: "Test Counterparty",
+                },
+        }, nil
+}</span>
+
+func (m *MockCounterpartyStore) GetByID(id int) (*models.Counterparty, error) <span class="cov0" title="0">{
+
+        if id == 1 </span><span class="cov0" title="0">{
+                return &amp;models.Counterparty{
+                        ID:       1,
+                        FullName: "Test Counterparty",
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("counterparty not found")</span>
+}
+
+func (m *MockCounterpartyStore) Create(input models.CreateCounterpartyInput) (*models.Counterparty, error) <span class="cov0" title="0">{
+
+        if input.FullName == "db-error" </span><span class="cov0" title="0">{
+                return nil, errors.New("database error")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Counterparty{
+                ID:       1,
+                FullName: input.FullName,
+        }, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package mocks
+
+import (
+        "errors"
+        "storeSystem/internal/database"
+        "storeSystem/internal/models"
+        "time"
+)
+
+type MockDeliveryListStore struct{}
+
+// GET ALL
+func (m *MockDeliveryListStore) GetAll() ([]models.DeliveryList, error) <span class="cov0" title="0">{
+        return []models.DeliveryList{
+                {
+                        ID:      1,
+                        Article: "Test article",
+                        Status:  "NEW",
+                },
+        }, nil
+}</span>
+
+// GET BY ID
+func (m *MockDeliveryListStore) GetByID(id int) (*models.DeliveryList, error) <span class="cov0" title="0">{
+        if id == 1 </span><span class="cov0" title="0">{
+                return &amp;models.DeliveryList{
+                        ID:      1,
+                        Article: "Test article",
+                        Status:  "NEW",
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("not found")</span>
+}
+
+// GET BY DELIVERY ID
+func (m *MockDeliveryListStore) GetByDeliveryID(id int) ([]models.DeliveryList, error) <span class="cov0" title="0">{
+        if id == 1 </span><span class="cov0" title="0">{
+                return []models.DeliveryList{
+                        {
+                                ID:      1,
+                                Article: "10",
+                        },
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("not found")</span>
+}
+
+// CREATE
+func (m *MockDeliveryListStore) Create(input models.CreateDeliveryListInput) (*models.DeliveryList, error) <span class="cov0" title="0">{
+
+        if input.Article == "db-error" </span><span class="cov0" title="0">{
+                return nil, errors.New("database error")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.DeliveryList{
+                ID:             1,
+                DeliveryId:     input.DeliveryId,
+                SupplierId:     input.SupplierId,
+                Article:        input.Article,
+                ExpectedAmount: input.ExpectedAmount,
+                Status:         "NEW",
+                CreatedAt:      time.Now(),
+                UpdatedAt:      time.Now(),
+        }, nil</span>
+}
+
+// PROCESS SCANNER EVENT (упрощённый mock)
+func (m *MockDeliveryListStore) ProcessScannerEvent(deliveryID int, evt models.Event, workerID int) (*database.DeliveryListUpdateDTO, error) <span class="cov0" title="0">{
+
+        if evt.Error != nil &amp;&amp; *evt.Error != "" </span><span class="cov0" title="0">{
+                return nil, errors.New("event error")
+        }</span>
+
+        <span class="cov0" title="0">if evt.Article == nil </span><span class="cov0" title="0">{
+                return nil, errors.New("article is nil")
+        }</span>
+
+        <span class="cov0" title="0">if *evt.Article == "fail" </span><span class="cov0" title="0">{
+                return nil, errors.New("processing failed")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;database.DeliveryListUpdateDTO{
+                DeliveryListID: 1,
+                DeliveryID:     deliveryID,
+                SupplierID:     1,
+                ExpectedAmount: 10,
+                RealAmount:     1,
+                Article:        *evt.Article,
+                Status:         "NOT_ENOUGH",
+                UpdatedAt:      time.Now(),
+        }, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package mocks
+
+import (
+        "errors"
+        "storeSystem/internal/models"
+)
+
+type MockDeliveryStore struct{}
+
+func (m *MockDeliveryStore) GetAll() ([]models.Delivery, error) <span class="cov0" title="0">{
+        return []models.Delivery{
+                {ID: 1, Status: "new"},
+        }, nil
+}</span>
+
+func (m *MockDeliveryStore) GetErrorDeliveries() ([]models.Delivery, error) <span class="cov0" title="0">{
+        return []models.Delivery{
+                {ID: 2, Status: "ERROR"},
+        }, nil
+}</span>
+
+func (m *MockDeliveryStore) GetByID(id int) (*models.Delivery, error) <span class="cov0" title="0">{
+        if id == 1 </span><span class="cov0" title="0">{
+                return &amp;models.Delivery{ID: 1, Status: "new"}, nil
+        }</span>
+        <span class="cov0" title="0">return nil, errors.New("not found")</span>
+}
+
+func (m *MockDeliveryStore) Create(input models.CreateDeliveryInput) (*models.Delivery, error) <span class="cov0" title="0">{
+        if input.Status == "db-error" </span><span class="cov0" title="0">{
+                return nil, errors.New("database error")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Delivery{ID: 1, Status: input.Status}, nil</span>
+}
+
+func (m *MockDeliveryStore) CompleteDelivery(id int) error <span class="cov0" title="0">{
+        if id == 999 </span><span class="cov0" title="0">{
+                return errors.New("db error")
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package mocks
+
+import (
+        "errors"
+        "storeSystem/internal/models"
+)
+
+type MockItemStore struct{}
+
+func (m *MockItemStore) GetAll() ([]models.Item, error) <span class="cov0" title="0">{
+        return []models.Item{
+                {
+                        ID:      1,
+                        Article: "Test",
+                },
+        }, nil
+}</span>
+
+func (m *MockItemStore) GetByID(id int) (*models.Item, error) <span class="cov0" title="0">{
+        if id == 1 </span><span class="cov0" title="0">{
+                return &amp;models.Item{
+                        ID:      1,
+                        Article: "Test item",
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("record not found")</span>
+}
+
+func (m *MockItemStore) Create(input models.CreateItemInput) (*models.Item, error) <span class="cov0" title="0">{
+        if input.Article == "db-error" </span><span class="cov0" title="0">{
+                return nil, errors.New("database error")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Item{
+                ID:      1,
+                Article: input.Article,
+        }, nil</span>
+}
+
+func (m *MockItemStore) Update(id int, input models.UpdateItemInput) (*models.Item, error) <span class="cov0" title="0">{
+        if id == 999 </span><span class="cov0" title="0">{
+                return nil, errors.New("record not found")
+        }</span>
+
+        <span class="cov0" title="0">if input.Article != nil &amp;&amp; *input.Article == "db-error" </span><span class="cov0" title="0">{
+                return nil, errors.New("database error")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Item{
+                ID: id,
+        }, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package mocks
+
+import (
+        "fmt"
+        "storeSystem/internal/helpers"
+)
+
+type MockMinio struct {
+        ShouldFail bool
+}
+
+func (m *MockMinio) CreateOne(data helpers.FileDataType) (*helpers.UploadedFile, error) <span class="cov0" title="0">{
+        if m.ShouldFail </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("minio error")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;helpers.UploadedFile{
+                ObjectID: "obj-1",
+                Link:     "http://file",
+        }, nil</span>
+}
+
+func (m *MockMinio) GetOne(objectID string) (string, error) <span class="cov0" title="0">{
+        if m.ShouldFail </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("minio error")
+        }</span>
+
+        <span class="cov0" title="0">return "http://file", nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package mocks
+
+import (
+        "fmt"
+        "storeSystem/internal/models"
+        "time"
+)
+
+type MockReportStore struct {
+        ShouldFail bool
+}
+
+func (m *MockReportStore) Create(userID int, reportType, fileName, objectID, bucketName, dateFrom, dateTo string) error <span class="cov0" title="0">{
+        if m.ShouldFail </span><span class="cov0" title="0">{
+                return fmt.Errorf("db error")
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (m *MockReportStore) GetByUserID(userID int) ([]models.Report, error) <span class="cov0" title="0">{
+        return []models.Report{
+                {
+                        ReportID:   1,
+                        UserID:     userID,
+                        ReportType: "stock",
+                        FileName:   "file.csv",
+                        ObjectID:   "obj-1",
+                        DateFrom:   "2024-01-01",
+                        DateTo:     "2024-01-02",
+                        CreatedAt:  time.Now(),
+                },
+        }, nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package mocks
+
+import (
+        "errors"
+        "storeSystem/internal/database"
+        "storeSystem/internal/models"
+        "time"
+)
+
+type MockShipmentListStore struct {
+}
+
+func (m *MockShipmentListStore) GetAll() ([]models.ShipmentList, error) <span class="cov0" title="0">{
+        return []models.ShipmentList{
+                {
+                        ID:             1,
+                        ShipmentId:     1,
+                        Article:        "test",
+                        ExpectedAmount: 10,
+                        Status:         "NEW",
+                },
+        }, nil
+}</span>
+
+func (m *MockShipmentListStore) GetByID(id int) (*models.ShipmentList, error) <span class="cov0" title="0">{
+        if id == 1 </span><span class="cov0" title="0">{
+                return &amp;models.ShipmentList{
+                        ID:      1,
+                        Article: "test",
+                        Status:  "NEW",
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("shipment_list not found")</span>
+}
+
+func (m *MockShipmentListStore) GetByShipmentID(id int) ([]models.ShipmentList, error) <span class="cov0" title="0">{
+        if id == 1 </span><span class="cov0" title="0">{
+                return []models.ShipmentList{
+                        {
+                                ID:         1,
+                                ShipmentId: 1,
+                                Article:    "test",
+                        },
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("not found")</span>
+}
+
+func (m *MockShipmentListStore) Create(input models.CreateShipmentListInput) (*models.ShipmentList, error) <span class="cov0" title="0">{
+        if input.Article == "db error" </span><span class="cov0" title="0">{
+                return nil, errors.New("database error")
+        }</span>
+        <span class="cov0" title="0">return &amp;models.ShipmentList{
+                ID:             1,
+                ShipmentId:     input.ShipmentId,
+                CustomerId:     input.CustomerId,
+                ExpectedAmount: input.ExpectedAmount,
+                Article:        input.Article,
+                Status:         "NEW",
+                CreatedAt:      time.Now(),
+        }, nil</span>
+}
+
+func (m *MockShipmentListStore) ProcessScannerEvent(
+        shipmentID int,
+        evt models.Event,
+        workerID int,
+) (*database.ShipmentListUpdateDTO, error) <span class="cov0" title="0">{
+
+        if evt.Error != nil &amp;&amp; *evt.Error != "" </span><span class="cov0" title="0">{
+                return nil, errors.New("event error")
+        }</span>
+
+        <span class="cov0" title="0">if evt.Article == nil </span><span class="cov0" title="0">{
+                return nil, errors.New("article is nil")
+        }</span>
+
+        <span class="cov0" title="0">if *evt.Article == "fail" </span><span class="cov0" title="0">{
+                return nil, errors.New("processing failed")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;database.ShipmentListUpdateDTO{
+                ShipmentListID: 1,
+                ShipmentID:     shipmentID,
+                CustomerID:     1,
+                ExpectedAmount: 10,
+                RealAmount:     1,
+                StockAvailable: 5,
+                StockReserved:  3,
+                Article:        *evt.Article,
+                Status:         "NOT_ENOUGH",
+                UpdatedAt:      time.Now(),
+        }, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package mocks
+
+import (
+        "errors"
+        "storeSystem/internal/models"
+)
+
+type MockShipmentStore struct{}
+
+func (m *MockShipmentStore) GetAll() ([]models.Shipment, error) <span class="cov0" title="0">{
+        return []models.Shipment{
+                {
+                        ID:     1,
+                        Status: "NEW",
+                },
+        }, nil
+}</span>
+
+func (m *MockShipmentStore) GetErrorShipments() ([]models.Shipment, error) <span class="cov0" title="0">{
+        return []models.Shipment{
+                {
+                        ID:     2,
+                        Status: "ERROR",
+                },
+        }, nil
+}</span>
+
+func (m *MockShipmentStore) GetByID(id int) (*models.Shipment, error) <span class="cov0" title="0">{
+        if id == 1 </span><span class="cov0" title="0">{
+                return &amp;models.Shipment{
+                        ID:     1,
+                        Status: "NEW",
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("shipment not found")</span>
+}
+
+func (m *MockShipmentStore) Create(input models.CreateShipmentInput) (*models.Shipment, error) <span class="cov0" title="0">{
+        if input.Status == "db error" </span><span class="cov0" title="0">{
+                return nil, errors.New("database error")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Shipment{
+                ID:     1,
+                Status: input.Status,
+        }, nil</span>
+}
+
+func (m *MockShipmentStore) CompleteShipment(id int) error <span class="cov0" title="0">{
+        if id == 999 </span><span class="cov0" title="0">{
+                return errors.New("db error")
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package mocks
+
+import (
+        "database/sql"
+        "errors"
+
+        "storeSystem/internal/models"
+)
+
+type MockStockStore struct{}
+
+func (m *MockStockStore) GetAll() ([]models.Stock, error) <span class="cov0" title="0">{
+
+        // success
+        return []models.Stock{
+                {
+                        Article:  "1",
+                        Quantity: 10,
+                },
+        }, nil
+}</span>
+
+type EmptyStockStoreMock struct{}
+
+func (m *EmptyStockStoreMock) GetAll() ([]models.Stock, error) <span class="cov0" title="0">{
+        return nil, sql.ErrNoRows
+}</span>
+
+type ErrorStockStoreMock struct{}
+
+func (m *ErrorStockStoreMock) GetAll() ([]models.Stock, error) <span class="cov0" title="0">{
+        return nil, errors.New("database error")
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package mocks
+
+import (
+        "errors"
+        "storeSystem/internal/models"
+
+        "golang.org/x/crypto/bcrypt"
+)
+
+type MockWorkerStore struct{}
+
+func (m *MockWorkerStore) GetByUsername(username string) (*models.Worker, error) <span class="cov0" title="0">{
+        if username == "valid" </span><span class="cov0" title="0">{
+                hash, _ := bcrypt.GenerateFromPassword([]byte("123"), bcrypt.DefaultCost)
+
+                return &amp;models.Worker{
+                        ID:           1,
+                        Username:     "valid",
+                        PasswordHash: string(hash),
+                        RoleId:       1,
+                }, nil
+        }</span>
+
+        <span class="cov0" title="0">return nil, errors.New("not found")</span>
+}
+
+func (m *MockWorkerStore) Create(input models.CreateWorkerInput) (*models.Worker, error) <span class="cov0" title="0">{
+        if input.Username == "exists" </span><span class="cov0" title="0">{
+                return nil, errors.New("already exists")
+        }</span>
+
+        <span class="cov0" title="0">return &amp;models.Worker{
+                ID:       1,
+                Username: input.Username,
+                RoleId:   input.RoleId,
+        }, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package database
+
+import (
+        "storeSystem/internal/models"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type ReportStore struct {
+        db *sqlx.DB
+}
+
+func NewReportStore(db *sqlx.DB) *ReportStore <span class="cov0" title="0">{
+        return &amp;ReportStore{db: db}
+}</span>
+
+func (s *ReportStore) Create(userID int, reportType, fileName, objectID, bucketName, dateFrom, dateTo string) error <span class="cov0" title="0">{
+        _, err := s.db.Exec(`
+                INSERT INTO report (
+                        user_id, report_type, file_name, object_id, bucket_name, date_from, date_to
+                )
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `, userID, reportType, fileName, objectID, bucketName, dateFrom, dateTo)
+
+        return err
+}</span>
+
+func (s *ReportStore) GetByUserID(userID int) ([]models.Report, error) <span class="cov0" title="0">{
+        rows, err := s.db.Query(`
+                SELECT report_id, user_id, report_type, file_name, object_id, bucket_name,
+                       date_from, date_to, created_at
+                FROM report
+                WHERE user_id = $1
+                ORDER BY created_at DESC
+        `, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        var reports []models.Report
+        for rows.Next() </span><span class="cov0" title="0">{
+                var r models.Report
+                err := rows.Scan(
+                        &amp;r.ReportID,
+                        &amp;r.UserID,
+                        &amp;r.ReportType,
+                        &amp;r.FileName,
+                        &amp;r.ObjectID,
+                        &amp;r.BucketName,
+                        &amp;r.DateFrom,
+                        &amp;r.DateTo,
+                        &amp;r.CreatedAt,
+                )
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov0" title="0">reports = append(reports, r)</span>
+        }
+
+        <span class="cov0" title="0">return reports, rows.Err()</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package database
+
+import (
+        "database/sql"
+        "fmt"
+        "storeSystem/internal/models"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type ShipmentStore struct {
+        db *sqlx.DB
+}
+
+func NewShipmentStore(db *sqlx.DB) *ShipmentStore <span class="cov0" title="0">{
+        return &amp;ShipmentStore{db: db}
+}</span>
+
+func (s *ShipmentStore) GetAll() ([]models.Shipment, error) <span class="cov0" title="0">{
+        var ships []models.Shipment
+        query := `SELECT * FROM shipment order by shipment_id asc;`
+
+        err := s.db.Select(&amp;ships, query)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return ships, nil</span>
+}
+
+func (s *ShipmentStore) GetErrorShipments() ([]models.Shipment, error) <span class="cov0" title="0">{
+        var ships []models.Shipment
+        query := `SELECT * FROM shipment WHERE status = 'ERROR' order by shipment_id asc;`
+
+        err := s.db.Select(&amp;ships, query)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return ships, nil</span>
+}
+
+func (s *ShipmentStore) GetByID(id int) (*models.Shipment, error) <span class="cov0" title="0">{
+        var ships models.Shipment
+        query := `SELECT * FROM shipment where shipment_id=$1;`
+
+        err := s.db.Get(&amp;ships, query, id)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("ship with id %d not found", id)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;ships, nil</span>
+}
+
+func (s *ShipmentStore) Create(input models.CreateShipmentInput) (*models.Shipment, error) <span class="cov0" title="0">{
+        var ship models.Shipment
+
+        query := `
+        INSERT INTO shipment (status, created_by)
+        VALUES ($1, $2)
+        returning shipment_id, status, completed_at, created_by, completed_by, created_at, updated_at;`
+
+        err := s.db.QueryRowx(query, input.Status, input.CreatedBy).StructScan(&amp;ship)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;ship, nil</span>
+}
+
+func (s *ShipmentStore) CompleteShipment(shipmentID int) error <span class="cov0" title="0">{
+        _, err := s.db.Exec(`
+                UPDATE shipment
+                SET status = CASE
+                        WHEN NOT EXISTS (
+                                SELECT 1
+                                FROM shipment_list
+                                WHERE shipment_id = $1
+                                  AND status != 'COMPLETED'
+                        )
+                        THEN 'COMPLETED'
+
+                        WHEN NOT EXISTS (
+                                SELECT 1
+                                FROM shipment_list
+                                WHERE shipment_id = $1
+                                  AND status != 'NEW'
+                        )
+                        THEN 'NEW'
+
+                        ELSE 'ERROR'
+                END,
+                completed_at = CURRENT_TIMESTAMP,
+                updated_at = CURRENT_TIMESTAMP
+                WHERE shipment_id = $1
+        `, shipmentID)
+        fmt.Println(err)
+        return err
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package database
+
+import (
+        "database/sql"
+        "fmt"
+        "storeSystem/internal/models"
+        "time"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type ShipmentListStore struct {
+        db *sqlx.DB
+}
+
+func NewShipmentListStore(db *sqlx.DB) *ShipmentListStore <span class="cov0" title="0">{
+        return &amp;ShipmentListStore{db: db}
+}</span>
+
+func (s *ShipmentListStore) GetAll() ([]models.ShipmentList, error) <span class="cov0" title="0">{
+        var lists []models.ShipmentList
+        query := `SELECT * FROM shipment_list ORDER BY created_at DESC;`
+
+        err := s.db.Select(&amp;lists, query)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return lists, nil</span>
+}
+
+func (s *ShipmentListStore) GetByID(id int) (*models.ShipmentList, error) <span class="cov0" title="0">{
+        var list models.ShipmentList
+        query := `SELECT * FROM shipment_list WHERE shipment_list_id=$1;`
+
+        err := s.db.Get(&amp;list, query, id)
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("shipment_list with id %d not found", id)
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;list, nil</span>
+}
+
+func (s *ShipmentListStore) GetByShipmentID(id int) ([]models.ShipmentList, error) <span class="cov0" title="0">{
+        var lists []models.ShipmentList
+        query := `SELECT * FROM shipment_list WHERE shipment_id=$1 ORDER BY shipment_list_id;`
+
+        err := s.db.Select(&amp;lists, query, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return lists, nil</span>
+}
+
+func (s *ShipmentListStore) Create(input models.CreateShipmentListInput) (*models.ShipmentList, error) <span class="cov0" title="0">{
+        tx, err := s.db.Beginx()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer tx.Rollback()
+
+        var list models.ShipmentList
+
+        query := `
+        INSERT INTO shipment_list (
+                shipment_id, customer_id,
+                expected_amount, article,
+                created_by, updated_by, created_at, updated_at
+        )
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+        RETURNING 
+                shipment_list_id, shipment_id, customer_id,
+                expected_amount, status, article,
+                created_by, updated_by, created_at, updated_at;
+        `
+
+        now := time.Now()
+
+        err = tx.QueryRowx(
+                query,
+                input.ShipmentId,
+                input.CustomerId,
+                input.ExpectedAmount,
+                input.Article,
+                input.CreatedBy,
+                input.UpdatedBy,
+                now,
+                now,
+        ).StructScan(&amp;list)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">_, err = tx.Exec(
+                `INSERT INTO stock_balance (article, reserved, updated_at)
+                VALUES ($1, $2, CURRENT_TIMESTAMP)
+                ON CONFLICT (article)
+                DO UPDATE SET
+                        reserved = stock_balance.reserved + EXCLUDED.reserved,
+                        updated_at = CURRENT_TIMESTAMP
+    `, list.Article, list.ExpectedAmount)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // фиксируем
+        <span class="cov0" title="0">if err = tx.Commit(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;list, nil</span>
+}
+
+type ShipmentListUpdateDTO struct {
+        ShipmentListID int       `json:"shipment_list_id"`
+        ShipmentID     int       `json:"shipment_id"`
+        CustomerID     int       `json:"customer_id"`
+        ExpectedAmount int       `json:"expected_amount"`
+        RealAmount     int       `json:"real_amount"`
+        StockAvailable int       `json:"stock_available"`
+        StockReserved  int       `json:"stock_reserved"`
+        Article        string    `json:"article"`
+        Status         string    `json:"status"`
+        UpdatedBy      int       `json:"updated_by"`
+        UpdatedAt      time.Time `json:"updated_at"`
+}
+
+func (s *ShipmentListStore) ProcessScannerEvent(shipmentID int, evt models.Event, workerID int) (*ShipmentListUpdateDTO, error) <span class="cov0" title="0">{
+
+        if evt.Error != nil &amp;&amp; *evt.Error != "" </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("error in event")
+        }</span>
+
+        // отгрузка = товар выходит
+        <span class="cov0" title="0">if evt.IsIn == nil || *evt.IsIn </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("the rfid is not outgoing")
+        }</span>
+
+        <span class="cov0" title="0">tx, err := s.db.Begin()
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer tx.Rollback()
+
+        var shipmentListID int
+
+        if evt.Article == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("article is nil in event")
+        }</span>
+
+        <span class="cov0" title="0">err = tx.QueryRow(`
+                SELECT shipment_list_id
+                FROM shipment_list
+                WHERE shipment_id = $1 AND article = $2
+        `, shipmentID, *evt.Article).Scan(&amp;shipmentListID)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("shipment_list not found")
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // 🔎 проверяем товар
+        <span class="cov0" title="0">var itemID int
+        err = tx.QueryRow(`
+                SELECT item_id
+                FROM item
+                WHERE rfid_id = $1 AND status = 'STOCKED'
+        `, evt.RfidId).Scan(&amp;itemID)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("item not found or already shipped")
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        // 🔥 блокируем строку склада
+        <span class="cov0" title="0">var quantity, reserved int
+        err = tx.QueryRow(`
+                SELECT quantity, reserved
+                FROM stock_balance
+                WHERE article = $1
+                FOR UPDATE
+        `, *evt.Article).Scan(&amp;quantity, &amp;reserved)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("stock not found")
+        }</span>
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        //available := quantity - reserved
+        <span class="cov0" title="0">if quantity &lt;= 0 </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("no available stock")
+        }</span>
+
+        // 🔥 атомарно уменьшаем склад и резерв
+        <span class="cov0" title="0">res, err := tx.Exec(`
+                UPDATE stock_balance
+                SET 
+                    quantity = quantity - 1,
+                    reserved = reserved - 1,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE article = $1
+                  AND quantity &gt; 0
+                  AND reserved &gt; 0
+        `, *evt.Article)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">rowsAffected, _ := res.RowsAffected()
+        if rowsAffected == 0 </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("no reserved stock available")
+        }</span>
+
+        <span class="cov0" title="0">_, err = tx.Exec(`
+                UPDATE item
+                SET status = 'SHIPPED',
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE item_id = $1
+        `, itemID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">var updated ShipmentListUpdateDTO
+
+        err = tx.QueryRow(`
+                UPDATE shipment_list
+                SET 
+                    real_amount = real_amount + 1,
+                    status = CASE
+                        WHEN real_amount + 1 = expected_amount THEN 'COMPLETED'
+                        WHEN real_amount + 1 &gt; expected_amount THEN 'OVER_SHIPPED'
+                        ELSE 'NOT_ENOUGH'
+                    END,
+                    updated_at = CURRENT_TIMESTAMP,
+                    updated_by = $1
+                WHERE shipment_list_id = $2
+                RETURNING 
+                        shipment_list_id,
+                        shipment_id,
+                        customer_id,
+                        expected_amount,
+                        real_amount,
+                        article,
+                        status,
+                        updated_by,
+                        updated_at
+        `, workerID, shipmentListID).Scan(
+                &amp;updated.ShipmentListID,
+                &amp;updated.ShipmentID,
+                &amp;updated.CustomerID,
+                &amp;updated.ExpectedAmount,
+                &amp;updated.RealAmount,
+                &amp;updated.Article,
+                &amp;updated.Status,
+                &amp;updated.UpdatedBy,
+                &amp;updated.UpdatedAt,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">_, err = tx.Exec(`
+                UPDATE shipment
+                SET updated_at = CURRENT_TIMESTAMP
+                WHERE shipment_id = $1
+        `, shipmentID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">if err = tx.Commit(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">updated.StockAvailable = quantity - 1
+        updated.StockReserved = reserved - 1
+        return &amp;updated, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package database
+
+import (
+        "storeSystem/internal/models"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type StockStore struct {
+        db *sqlx.DB
+}
+
+func NewStockStore(db *sqlx.DB) *StockStore <span class="cov0" title="0">{
+        return &amp;StockStore{db: db}
+}</span>
+
+func (s *StockStore) GetAll() ([]models.Stock, error) <span class="cov0" title="0">{
+        var stocks []models.Stock
+        query := `SELECT * FROM stock_balance order by quantity desc;`
+
+        err := s.db.Select(&amp;stocks, query)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return stocks, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package database
+
+import (
+        "database/sql"
+        "fmt"
+        "storeSystem/internal/auth"
+        "storeSystem/internal/models"
+
+        "github.com/jmoiron/sqlx"
+)
+
+type WorkerStore struct {
+        db *sqlx.DB
+}
+
+func (s *WorkerStore) GetByUsername(username string) (*models.Worker, error) <span class="cov0" title="0">{
+        var worker models.Worker
+
+        query := `
+        SELECT worker_id, full_name, username, password_hash, role_id
+        FROM worker
+        WHERE username=$1
+        `
+
+        err := s.db.Get(&amp;worker, query, username)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("worker not found")
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;worker, nil</span>
+}
+
+func (s *WorkerStore) GetByID(id int) (*models.Worker, error) <span class="cov0" title="0">{
+        var worker models.Worker
+
+        query := `
+        SELECT worker_id, full_name, username, password_hash, role_id
+        FROM worker
+        WHERE worker_id=$1
+        `
+
+        err := s.db.Get(&amp;worker, query, id)
+
+        if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("worker not found")
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;worker, nil</span>
+}
+
+func (s *WorkerStore) Create(worker models.CreateWorkerInput) (*models.Worker, error) <span class="cov0" title="0">{
+        hash, err := auth.HashPassword(worker.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">query := `
+        INSERT INTO worker (full_name, username, password_hash, role_id)
+        VALUES ($1,$2,$3,$4)
+        RETURNING worker_id, full_name, username, role_id
+        `
+
+        var createdWorker models.Worker
+
+        err = s.db.QueryRowx(
+                query,
+                worker.FullName,
+                worker.Username,
+                hash,
+                worker.RoleId,
+        ).StructScan(&amp;createdWorker)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;createdWorker, nil</span>
+}
+
+func NewWorkerStore(db *sqlx.DB) *WorkerStore <span class="cov0" title="0">{
+        return &amp;WorkerStore{db: db}
+}</span>
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "net/http"
+        "storeSystem/internal/auth"
+        "storeSystem/internal/models"
+        "storeSystem/internal/validation"
+)
+
+type LoginInput struct {
+        Username string `json:"username"`
+        Password string `json:"password"`
+}
+
+func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input LoginInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "неправильные поля")
+                return
+        }</span>
+
+        <span class="cov8" title="1">worker, err := h.workerStore.GetByUsername(input.Username)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusUnauthorized, "Имя пользователя не найдено")
+                return
+        }</span>
+
+        <span class="cov8" title="1">err = auth.CheckPassword(worker.PasswordHash, input.Password)
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusUnauthorized, "Неправильное имя пользователя или пароль")
+                return
+        }</span>
+
+        <span class="cov8" title="1">token, err := auth.GenerateToken(worker.ID, worker.RoleId, worker.Username)
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, "internal error")
+                return
+        }</span>
+
+        <span class="cov8" title="1">http.SetCookie(w, &amp;http.Cookie{
+                Name:     "token",
+                Value:    token,
+                Path:     "/",
+                HttpOnly: true,
+                Secure:   false, // true на https
+                SameSite: http.SameSiteLaxMode,
+                MaxAge:   86400,
+        })
+
+        respondWithJSON(w, http.StatusOK, map[string]interface{}{
+                "id":       worker.ID,
+                "username": worker.Username,
+                "role_id":  worker.RoleId,
+        })</span>
+}
+
+func (h *Handlers) Logout(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        http.SetCookie(w, &amp;http.Cookie{
+                Name:     "token",
+                Value:    "",
+                Path:     "/",
+                HttpOnly: true,
+                Secure:   false, // true на https
+                SameSite: http.SameSiteLaxMode,
+                MaxAge:   -1,
+        })
+
+        respondWithJSON(w, http.StatusOK, map[string]string{
+                "message": "успешный выход",
+        })
+}</span>
+
+func (h *Handlers) Me(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        claims, ok := GetUserClaimsFromContext(r.Context())
+        if !ok </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusUnauthorized, "нет данных пользователя")
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, map[string]interface{}{
+                "id":       claims.UserID,
+                "username": claims.Username,
+                "role_id":  claims.RoleID,
+        })</span>
+}
+
+func (h *Handlers) CreateWorker(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input models.CreateWorkerInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "bad request")
+                return
+        }</span>
+
+        <span class="cov8" title="1">err := validation.Validate.Struct(input)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">_, err = h.workerStore.GetByUsername(input.Username)
+        if err == nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusConflict, "user with this username already exists")
+                return
+        }</span>
+
+        <span class="cov0" title="0">worker, err := h.workerStore.Create(input)
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">respondWithJSON(w, http.StatusCreated, worker)</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "storeSystem/internal/models"
+        "strconv"
+
+        "github.com/go-chi/chi/v5"
+)
+
+func (h *Handlers) GetAllCounterparties(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        counterparties, err := h.counterpartyStore.GetAll()
+        fmt.Println(err)
+        fmt.Println(counterparties)
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, "Ошибка получения контрагентов")
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, counterparties)</span>
+}
+
+func (h *Handlers) GetCounterpartyByID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id контрагента")
+                return
+        }</span>
+        <span class="cov8" title="1">counterparty, err := h.counterpartyStore.GetByID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, counterparty)</span>
+}
+
+func (h *Handlers) CreateCounterparty(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input models.CreateCounterpartyInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректно отправленные данные")
+                return
+        }</span>
+
+        <span class="cov8" title="1">counterparty, err := h.counterpartyStore.Create(input)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusCreated, counterparty)</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "storeSystem/internal/models"
+        "strconv"
+        "strings"
+
+        "github.com/go-chi/chi/v5"
+)
+
+func (h *Handlers) GetAllDeliveries(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        del, err := h.deliveryStore.GetAll()
+
+        fmt.Println(del, err)
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, "Ошибка получения поставок")
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, del)</span>
+}
+
+func (h *Handlers) GetDeliveryByID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id поставки")
+                return
+        }</span>
+        <span class="cov8" title="1">del, err := h.deliveryStore.GetByID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, del)</span>
+}
+
+func (h *Handlers) CreateDelivery(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input models.CreateDeliveryInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректно отправленные данные")
+                return
+        }</span>
+
+        <span class="cov8" title="1">if strings.TrimSpace(input.Status) == "" </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "status должен присутствовать")
+                return
+        }</span>
+
+        <span class="cov8" title="1">del, err := h.deliveryStore.Create(input)
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusCreated, del)</span>
+}
+
+func (h *Handlers) GetDeliveryListsByDeliveryID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id поставки")
+                return
+        }</span>
+        <span class="cov8" title="1">lists, err := h.deliveryListStore.GetByDeliveryID(id)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, lists)</span>
+}
+
+func (h *Handlers) CompleteDelivery(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id")
+                return
+        }</span>
+
+        <span class="cov8" title="1">err = h.deliveryStore.CompleteDelivery(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, map[string]string{
+                "status": "completed",
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package handlers
+
+import (
+        "bufio"
+        "encoding/json"
+        "fmt"
+        "io"
+        "net/http"
+        "storeSystem/internal/models"
+        "strconv"
+        "strings"
+
+        "github.com/go-chi/chi/v5"
+)
+
+func (h *Handlers) GetAllDeliveryLists(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        delLists, err := h.deliveryListStore.GetAll()
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, "Ошибка получения листов поставок")
+                return
+        }</span>
+        <span class="cov0" title="0">respondWithJSON(w, http.StatusOK, delLists)</span>
+}
+
+func (h *Handlers) GetDeliveryListByID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id листа поставки")
+                return
+        }</span>
+        <span class="cov8" title="1">delList, err := h.deliveryListStore.GetByID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, delList)</span>
+}
+
+func (h *Handlers) CreateDeliveryList(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input models.CreateDeliveryListInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректно отправленные данные")
+                return
+        }</span>
+
+        <span class="cov8" title="1">if strings.TrimSpace(input.Article) == "" </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "article должен присутствовать")
+                return
+        }</span>
+
+        <span class="cov8" title="1">delList, err := h.deliveryListStore.Create(input)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusCreated, delList)</span>
+}
+
+func (h *Handlers) AddFromFile(line string, userID int) (*models.DeliveryList, error) <span class="cov8" title="1">{
+        line = strings.TrimSpace(line)
+        if line == "" </span><span class="cov8" title="1">{
+                return nil, fmt.Errorf("пустая строка")
+        }</span>
+
+        <span class="cov8" title="1">params := strings.Split(line, ",")
+        if len(params) &lt; 4 </span><span class="cov8" title="1">{
+                return nil, fmt.Errorf("некорректная строка: %s", line)
+        }</span>
+
+        <span class="cov8" title="1">var input models.CreateDeliveryListInput
+
+        input.DeliveryId, _ = strconv.Atoi(params[0])
+        input.SupplierId, _ = strconv.Atoi(params[1])
+        input.Article = params[2]
+        input.ExpectedAmount, _ = strconv.Atoi(params[3])
+        input.CreatedBy = userID
+        input.UpdatedBy = &amp;userID
+
+        delList, err := h.deliveryListStore.Create(input)
+
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return delList, nil</span>
+}
+
+func (h *Handlers) UploadDeliveryList(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        file, handler, err := r.FormFile("file")
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Ошибка получения файла:", err)
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov0" title="0">defer file.Close()
+
+        fmt.Printf("Загружен файл: %+v\n", handler.Filename)
+
+        reader := bufio.NewReader(file)
+        firstLine := true
+        claims, _ := GetUserClaimsFromContext(r.Context())
+
+        var result []*models.DeliveryList
+
+        for </span><span class="cov0" title="0">{
+                line, err := reader.ReadString('\n')
+                if err == io.EOF </span><span class="cov0" title="0">{
+                        break</span>
+                }
+                <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                        respondWithError(w, http.StatusBadRequest, err.Error())
+                        return
+                }</span>
+
+                <span class="cov0" title="0">if firstLine </span><span class="cov0" title="0">{
+                        firstLine = false
+                        continue</span>
+                }
+
+                <span class="cov0" title="0">fmt.Printf("%s len line %d", line, len(line))
+
+                delList, err := h.AddFromFile(line, claims.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        respondWithError(w, http.StatusBadRequest, err.Error())
+                        return
+                }</span>
+
+                <span class="cov0" title="0">result = append(result, delList)</span>
+        }
+
+        <span class="cov0" title="0">respondWithJSON(w, http.StatusOK, result)</span>
+
+}
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">//go:build !nocover
+// +build !nocover
+
+package handlers
+
+import (
+        "encoding/json"
+        "net/http"
+        "sync"
+)
+
+type scanSubscription struct {
+        DeliveryID int
+        WorkerID   int
+        Conn       Conn
+}
+type Handlers struct {
+        itemStore         ItemStore
+        workerStore       WorkerStore
+        deliveryListStore DeliveryListStore
+        deliveryStore     DeliveryStore
+        shipmentListStore ShipmentListStore
+        shipmentStore     ShipmentStore
+        stockStore        StockStore
+        counterpartyStore CounterpartyStore
+        minioService      MinioService
+        reportStore       ReportStore
+        mu                sync.Mutex
+        clients           map[int]map[string][]Subscription
+}
+
+func NewHandlers(
+        itemStore ItemStore,
+        workerStore WorkerStore,
+        deliveryListStore DeliveryListStore,
+        deliveryStore DeliveryStore,
+        shipmentListStore ShipmentListStore,
+        shipmentStore ShipmentStore,
+        counterpartyStore CounterpartyStore,
+        stockStore StockStore,
+        minioService MinioService,
+        reportStore ReportStore,
+) *Handlers <span class="cov0" title="0">{
+        return &amp;Handlers{
+                itemStore:         itemStore,
+                workerStore:       workerStore,
+                deliveryListStore: deliveryListStore,
+                deliveryStore:     deliveryStore,
+                shipmentListStore: shipmentListStore,
+                shipmentStore:     shipmentStore,
+                counterpartyStore: counterpartyStore,
+                stockStore:        stockStore,
+                minioService:      minioService,
+                reportStore:       reportStore,
+                clients:           make(map[int]map[string][]Subscription),
+        }
+}</span>
+
+func respondWithJSON(w http.ResponseWriter, statusCode int, payload interface{}) <span class="cov8" title="1">{
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(statusCode)
+        json.NewEncoder(w).Encode(payload)
+}</span>
+
+func respondWithError(w http.ResponseWriter, statusCode int, message string) <span class="cov8" title="1">{
+        respondWithJSON(w, statusCode, map[string]string{"error": message})
+}</span>
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "net/http"
+        "storeSystem/internal/models"
+        "strconv"
+        "strings"
+
+        "github.com/go-chi/chi/v5"
+)
+
+func (h *Handlers) GetAllItems(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        items, err := h.itemStore.GetAll()
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, "Ошибка получения товаров")
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, items)</span>
+}
+
+func (h *Handlers) GetItemByID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id товара")
+                return
+        }</span>
+        <span class="cov8" title="1">item, err := h.itemStore.GetByID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, item)</span>
+}
+
+func (h *Handlers) CreateItem(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input models.CreateItemInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректно отправленные данные")
+                return
+        }</span>
+
+        <span class="cov8" title="1">if strings.TrimSpace(input.Article) == "" </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "article item должен присутствовать")
+                return
+        }</span>
+
+        <span class="cov8" title="1">item, err := h.itemStore.Create(input)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusCreated, item)</span>
+}
+
+func (h *Handlers) UpdateItem(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id задачи")
+                return
+        }</span>
+
+        <span class="cov8" title="1">var input models.UpdateItemInput
+
+        err = json.NewDecoder(r.Body).Decode(&amp;input)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректные данные")
+                return
+        }</span>
+
+        <span class="cov8" title="1">if input.Article != nil &amp;&amp; strings.TrimSpace(*input.Article) == "" </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Заголовок обязательный")
+        }</span>
+        <span class="cov8" title="1">item, err := h.itemStore.Update(id, input)
+
+        if err != nil </span><span class="cov8" title="1">{
+                if strings.Contains(err.Error(), "record not found") </span><span class="cov8" title="1">{
+                        respondWithError(w, http.StatusNotFound, err.Error())
+                }</span> else<span class="cov8" title="1"> {
+                        respondWithError(w, http.StatusInternalServerError, err.Error())
+                }</span>
+                <span class="cov8" title="1">return</span>
+        }
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, item)</span>
+}
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package handlers
+
+import (
+        "context"
+        "net/http"
+
+        "storeSystem/internal/auth"
+        "storeSystem/internal/models"
+)
+
+type contextKey string
+
+const UserClaimsKey contextKey = "userClaims"
+
+func (h *Handlers) AuthMiddleware(next http.Handler) http.Handler <span class="cov8" title="1">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov8" title="1">{
+                cookie, err := r.Cookie("token")
+                if err != nil </span><span class="cov8" title="1">{
+                        respondWithError(w, http.StatusUnauthorized, "токен отсутствует")
+                        return
+                }</span>
+
+                <span class="cov8" title="1">if cookie.Value == "" </span><span class="cov0" title="0">{
+                        respondWithError(w, http.StatusUnauthorized, "пустой токен")
+                        return
+                }</span>
+
+                <span class="cov8" title="1">claims, err := auth.ParseToken(cookie.Value)
+                if err != nil </span><span class="cov0" title="0">{
+                        respondWithError(w, http.StatusUnauthorized, "невалидный токен")
+                        return
+                }</span>
+
+                <span class="cov8" title="1">ctx := context.WithValue(r.Context(), UserClaimsKey, claims)
+                next.ServeHTTP(w, r.WithContext(ctx))</span>
+        })
+}
+
+func GetUserClaimsFromContext(ctx context.Context) (*models.Claims, bool) <span class="cov8" title="1">{
+        claims, ok := ctx.Value(UserClaimsKey).(*models.Claims)
+        return claims, ok
+}</span>
+
+func RequireAdmin() func(http.Handler) http.Handler <span class="cov0" title="0">{
+        return func(next http.Handler) http.Handler </span><span class="cov0" title="0">{
+                return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                        claims, ok := GetUserClaimsFromContext(r.Context())
+                        if !ok </span><span class="cov0" title="0">{
+                                respondWithError(w, http.StatusUnauthorized, "не авторизован")
+                                return
+                        }</span>
+
+                        <span class="cov0" title="0">if claims.RoleID == 1 </span><span class="cov0" title="0">{
+                                next.ServeHTTP(w, r)
+                                return
+                        }</span>
+                        <span class="cov0" title="0">respondWithError(w, http.StatusForbidden, "доступ запрещён")</span>
+                })
+        }
+}
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">package handlers
+
+import (
+        "bytes"
+        "encoding/csv"
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "storeSystem/internal/config"
+        "storeSystem/internal/helpers"
+        "strconv"
+        "time"
+)
+
+type ReportConfig struct {
+        ReportType string `json:"report_type"`
+        DateFrom   string `json:"date_from"`
+        DateTo     string `json:"date_to"`
+        UserID     int
+}
+
+func (h *Handlers) writeStockCSV(writer *csv.Writer) error <span class="cov8" title="1">{
+        stocks, err := h.stockStore.GetAll()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("ошибка получения остатков")
+        }</span>
+
+        <span class="cov8" title="1">if err := writer.Write([]string{"Артикул", "Количество", "Время изменения"}); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">for _, stock := range stocks </span><span class="cov8" title="1">{
+                record := []string{
+                        stock.Article,
+                        strconv.Itoa(stock.Quantity),
+                        stock.UpdatedAt.Format("2006-01-02 15:04:05"),
+                }
+
+                if err := writer.Write(record); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (h *Handlers) writeErrorDeliveriesCSV(writer *csv.Writer) error <span class="cov0" title="0">{
+        errorDeliveries, err := h.deliveryStore.GetErrorDeliveries()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("ошибка получения ошибочных поставок")
+        }</span>
+
+        <span class="cov0" title="0">if err := writer.Write([]string{"Статус", "Время приема", "Создано сотрудником", "Принято сотрудником", "Время создания", "Время обновления"}); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">for _, del := range errorDeliveries </span><span class="cov0" title="0">{
+                record := []string{
+                        del.Status,
+                        del.AcceptedAt.Format("2006-01-02 15:04:05"),
+                        strconv.Itoa(del.CreatedBy),
+                        strconv.Itoa(del.AcceptedBy),
+                        del.CreatedAt.Format("2006-01-02 15:04:05"),
+                        del.UpdatedAt.Format("2006-01-02 15:04:05"),
+                }
+
+                if err := writer.Write(record); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (h *Handlers) GenerateReportFile(reportConfig *ReportConfig) (*map[string]string, error) <span class="cov8" title="1">{
+        var buf bytes.Buffer
+        writer := csv.NewWriter(&amp;buf)
+
+        var writeCSVError error
+        switch reportConfig.ReportType </span>{
+        case "stock":<span class="cov8" title="1">
+                writeCSVError = h.writeStockCSV(writer)</span>
+        case "delivery_errors":<span class="cov0" title="0">
+                writeCSVError = h.writeErrorDeliveriesCSV(writer)</span>
+        default:<span class="cov8" title="1">
+                writeCSVError = fmt.Errorf("Неизвестный тип отчета")</span>
+        }
+
+        <span class="cov8" title="1">if writeCSVError != nil </span><span class="cov8" title="1">{
+                return nil, writeCSVError
+        }</span>
+
+        <span class="cov8" title="1">writer.Flush()
+        if err := writer.Error(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">filename := reportConfig.ReportType + "_" + time.Now().Format("2006-01-02_15-04-05") + ".csv"
+
+        fileData := helpers.FileDataType{
+                FileName: filename,
+                Data:     buf.Bytes(),
+        }
+
+        uploaded, err := h.minioService.CreateOne(fileData)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("unable to save the file: %w", err)
+        }</span>
+
+        <span class="cov8" title="1">err = h.reportStore.Create(
+                reportConfig.UserID,
+                reportConfig.ReportType,
+                filename,
+                uploaded.ObjectID,
+                config.AppConfig.BucketName,
+                reportConfig.DateFrom,
+                reportConfig.DateTo,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return &amp;map[string]string{
+                "link":     uploaded.Link,
+                "filename": filename,
+        }, nil</span>
+}
+
+func (h *Handlers) GenerateReport(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        var config ReportConfig
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;config); err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">claims, ok := GetUserClaimsFromContext(r.Context())
+        if !ok </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusBadRequest, "no claims")
+                return
+        }</span>
+        <span class="cov0" title="0">config.UserID = claims.UserID
+
+        result, err := h.GenerateReportFile(&amp;config)
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov0" title="0">respondWithJSON(w, http.StatusOK, map[string]string{
+                "link":     (*result)["link"],
+                "filename": (*result)["filename"],
+        })</span>
+}
+
+func (h *Handlers) GetUsersReports(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        claims, ok := GetUserClaimsFromContext(r.Context())
+        if !ok </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "no claims")
+                return
+        }</span>
+        <span class="cov8" title="1">userID := claims.UserID
+
+        reports, err := h.reportStore.GetByUserID(userID)
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">type ReportResponse struct {
+                ReportID   int       `json:"report_id"`
+                ReportType string    `json:"report_type"`
+                FileName   string    `json:"file_name"`
+                Link       string    `json:"link"`
+                DateFrom   string    `json:"date_from"`
+                DateTo     string    `json:"date_to"`
+                CreatedAt  time.Time `json:"created_at"`
+        }
+
+        result := make([]ReportResponse, 0, len(reports))
+
+        for _, report := range reports </span><span class="cov8" title="1">{
+                link, err := h.minioService.GetOne(report.ObjectID)
+                if err != nil </span><span class="cov8" title="1">{
+                        continue</span>
+                }
+
+                <span class="cov8" title="1">result = append(result, ReportResponse{
+                        ReportID:   report.ReportID,
+                        ReportType: report.ReportType,
+                        FileName:   report.FileName,
+                        Link:       link,
+                        DateFrom:   report.DateFrom,
+                        DateTo:     report.DateTo,
+                        CreatedAt:  report.CreatedAt,
+                })</span>
+        }
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, result)</span>
+}
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "fmt"
+        "net/http"
+        "storeSystem/internal/models"
+        "strconv"
+        "strings"
+
+        "github.com/go-chi/chi/v5"
+)
+
+func (h *Handlers) GetAllShipments(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        sh, err := h.shipmentStore.GetAll()
+
+        fmt.Println(sh, err)
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, "Ошибка получения отгрузок")
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, sh)</span>
+}
+
+func (h *Handlers) GetShipmentByID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id отгрузки")
+                return
+        }</span>
+
+        <span class="cov8" title="1">sh, err := h.shipmentStore.GetByID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, sh)</span>
+}
+
+func (h *Handlers) CreateShipment(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input models.CreateShipmentInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректно отправленные данные")
+                return
+        }</span>
+
+        <span class="cov8" title="1">if strings.TrimSpace(input.Status) == "" </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "status должен присутствовать")
+                return
+        }</span>
+
+        <span class="cov8" title="1">sh, err := h.shipmentStore.Create(input)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusCreated, sh)</span>
+}
+
+func (h *Handlers) GetShipmentListsByShipmentID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id отгрузки")
+                return
+        }</span>
+
+        <span class="cov8" title="1">lists, err := h.shipmentListStore.GetByShipmentID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, lists)</span>
+}
+
+func (h *Handlers) CompleteShipment(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id")
+                return
+        }</span>
+
+        <span class="cov8" title="1">err = h.shipmentStore.CompleteShipment(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, map[string]string{
+                "status": "completed",
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file33" style="display: none">package handlers
+
+import (
+        "bufio"
+        "encoding/json"
+        "fmt"
+        "io"
+        "net/http"
+        "storeSystem/internal/models"
+        "strconv"
+        "strings"
+
+        "github.com/go-chi/chi/v5"
+)
+
+func (h *Handlers) GetAllShipmentLists(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        lists, err := h.shipmentListStore.GetAll()
+
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusInternalServerError, "Ошибка получения листов отгрузки")
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, lists)</span>
+}
+
+func (h *Handlers) GetShipmentListByID(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        idStr := chi.URLParam(r, "id")
+        id, err := strconv.Atoi(idStr)
+
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректный id листа отгрузки")
+                return
+        }</span>
+
+        <span class="cov8" title="1">list, err := h.shipmentListStore.GetByID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, list)</span>
+}
+
+func (h *Handlers) CreateShipmentList(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        var input models.CreateShipmentListInput
+
+        if err := json.NewDecoder(r.Body).Decode(&amp;input); err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "Некорректно отправленные данные")
+                return
+        }</span>
+
+        <span class="cov8" title="1">if strings.TrimSpace(input.Article) == "" </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusBadRequest, "article должен присутствовать")
+                return
+        }</span>
+
+        <span class="cov8" title="1">list, err := h.shipmentListStore.Create(input)
+        if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, err.Error())
+                return
+        }</span>
+
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusCreated, list)</span>
+}
+
+func (h *Handlers) AddShipmentFromFile(line string, userID int) (*models.ShipmentList, error) <span class="cov8" title="1">{
+        line = strings.TrimSpace(line)
+        if line == "" </span><span class="cov8" title="1">{
+                return nil, fmt.Errorf("пустая строка")
+        }</span>
+
+        <span class="cov8" title="1">params := strings.Split(line, ",")
+        if len(params) &lt; 4 </span><span class="cov8" title="1">{
+                return nil, fmt.Errorf("некорректная строка: %s", line)
+        }</span>
+
+        <span class="cov8" title="1">var input models.CreateShipmentListInput
+
+        input.ShipmentId, _ = strconv.Atoi(params[0])
+        input.CustomerId, _ = strconv.Atoi(params[1])
+        input.Article = params[2]
+        input.ExpectedAmount, _ = strconv.Atoi(params[3])
+
+        input.CreatedBy = userID
+        input.UpdatedBy = &amp;userID
+
+        list, err := h.shipmentListStore.Create(input)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return list, nil</span>
+}
+
+func (h *Handlers) UploadShipmentList(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        file, handler, err := r.FormFile("file")
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Ошибка получения файла:", err)
+                respondWithError(w, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov0" title="0">defer file.Close()
+
+        fmt.Printf("Загружен файл: %+v\n", handler.Filename)
+
+        reader := bufio.NewReader(file)
+        firstLine := true
+
+        claims, _ := GetUserClaimsFromContext(r.Context())
+
+        var result []*models.ShipmentList
+
+        for </span><span class="cov0" title="0">{
+                line, err := reader.ReadString('\n')
+                if err == io.EOF </span><span class="cov0" title="0">{
+                        break</span>
+                }
+                <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                        respondWithError(w, http.StatusBadRequest, err.Error())
+                        return
+                }</span>
+
+                <span class="cov0" title="0">if firstLine </span><span class="cov0" title="0">{
+                        firstLine = false
+                        continue</span>
+                }
+
+                <span class="cov0" title="0">fmt.Printf("%s len line %d", line, len(line))
+
+                list, err := h.AddShipmentFromFile(line, claims.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        respondWithError(w, http.StatusBadRequest, err.Error())
+                        return
+                }</span>
+
+                <span class="cov0" title="0">result = append(result, list)</span>
+        }
+
+        <span class="cov0" title="0">respondWithJSON(w, http.StatusOK, result)</span>
+}
+</pre>
+		
+		<pre class="file" id="file34" style="display: none">package handlers
+
+import (
+        "database/sql"
+        "net/http"
+)
+
+func (h *Handlers) GetAllStocks(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        stocks, err := h.stockStore.GetAll()
+
+        if err == sql.ErrNoRows </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusOK, "Пустой склад")
+                return
+        }</span>
+
+        <span class="cov8" title="1">if err != nil </span><span class="cov8" title="1">{
+                respondWithError(w, http.StatusInternalServerError, "Ошибка получения остатков")
+                return
+        }</span>
+        <span class="cov8" title="1">respondWithJSON(w, http.StatusOK, stocks)</span>
+}
+</pre>
+		
+		<pre class="file" id="file35" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "fmt"
+        "storeSystem/internal/models"
+        "strconv"
+        "time"
+
+        "github.com/go-chi/chi/v5"
+        "github.com/gorilla/websocket"
+        "github.com/lib/pq"
+
+        "net/http"
+)
+
+type Subscription struct {
+        ObjectID int // delivery_id / shipment_id
+        WorkerID int
+        Conn     Conn
+        Handler  func(evt models.Event) (any, error)
+}
+
+var upgrader = websocket.Upgrader{
+        CheckOrigin: func(r *http.Request) bool <span class="cov0" title="0">{ return true }</span>,
+}
+
+func (h *Handlers) Socket(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        objectType := chi.URLParam(r, "object_type") // delivery / shipment
+        objectIDStr := chi.URLParam(r, "object_id")
+        scannerStr := chi.URLParam(r, "scanner_id")
+
+        claims, ok := GetUserClaimsFromContext(r.Context())
+        if !ok </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">objectID, err := strconv.Atoi(objectIDStr)
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusBadRequest, "invalid object_id")
+                return
+        }</span>
+
+        <span class="cov0" title="0">scannerID, err := strconv.Atoi(scannerStr)
+        if err != nil </span><span class="cov0" title="0">{
+                respondWithError(w, http.StatusBadRequest, "invalid scanner_id")
+                return
+        }</span>
+
+        <span class="cov0" title="0">conn, err := upgrader.Upgrade(w, r, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return
+        }</span>
+
+        <span class="cov0" title="0">sub := Subscription{
+                ObjectID: objectID,
+                WorkerID: claims.UserID,
+                Conn:     conn,
+        }
+
+        h.mu.Lock()
+        if h.clients[scannerID] == nil </span><span class="cov0" title="0">{
+                h.clients[scannerID] = make(map[string][]Subscription)
+        }</span>
+        <span class="cov0" title="0">h.clients[scannerID][objectType] = append(h.clients[scannerID][objectType], sub)
+        h.mu.Unlock()
+
+        defer func() </span><span class="cov0" title="0">{
+                h.removeClient(scannerID, objectType, conn)
+                conn.Close()
+        }</span>()
+
+        <span class="cov0" title="0">for </span><span class="cov0" title="0">{
+                if _, _, err := conn.ReadMessage(); err != nil </span><span class="cov0" title="0">{
+                        break</span>
+                }
+        }
+}
+
+func (h *Handlers) removeClient(scannerID int, objectType string, conn Conn) <span class="cov8" title="1">{
+        h.mu.Lock()
+        defer h.mu.Unlock()
+
+        list := h.clients[scannerID][objectType]
+
+        for i, sub := range list </span><span class="cov8" title="1">{
+                if sub.Conn == conn </span><span class="cov8" title="1">{
+                        list = append(list[:i], list[i+1:]...)
+                        break</span>
+                }
+        }
+
+        <span class="cov8" title="1">if len(list) == 0 </span><span class="cov0" title="0">{
+                delete(h.clients[scannerID], objectType)
+        }</span> else<span class="cov8" title="1"> {
+                h.clients[scannerID][objectType] = list
+        }</span>
+}
+
+func (h *Handlers) Broadcast(scannerID int, objectType string, payload []byte) <span class="cov0" title="0">{
+        h.mu.Lock()
+        clients := append([]Subscription(nil), h.clients[scannerID][objectType]...)
+        h.mu.Unlock()
+
+        var alive []Subscription
+
+        for _, sub := range clients </span><span class="cov0" title="0">{
+                err := sub.Conn.WriteMessage(websocket.TextMessage, payload)
+                if err != nil </span><span class="cov0" title="0">{
+                        sub.Conn.Close()
+                        continue</span>
+                }
+                <span class="cov0" title="0">alive = append(alive, sub)</span>
+        }
+
+        <span class="cov0" title="0">h.mu.Lock()
+        if len(alive) == 0 </span><span class="cov0" title="0">{
+                delete(h.clients[scannerID], objectType)
+        }</span> else<span class="cov0" title="0"> {
+                h.clients[scannerID][objectType] = alive
+        }</span>
+        <span class="cov0" title="0">h.mu.Unlock()</span>
+}
+
+func (h *Handlers) ListenEvents(dsn string) <span class="cov0" title="0">{
+        listener := pq.NewListener(dsn, 10*time.Second, time.Minute, nil)
+
+        _ = listener.Listen("event_channel")
+
+        for </span><span class="cov0" title="0">{
+                select </span>{
+                case n := &lt;-listener.Notify:<span class="cov0" title="0">
+                        if n == nil </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+
+                        <span class="cov0" title="0">var evt models.Event
+                        if err := json.Unmarshal([]byte(n.Extra), &amp;evt); err != nil </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+
+                        <span class="cov0" title="0">h.processEvent(evt)</span>
+                }
+        }
+}
+
+func (h *Handlers) processEvent(evt models.Event) <span class="cov8" title="1">{
+        h.mu.Lock()
+        scannerClients := h.clients[evt.Scanner]
+        h.mu.Unlock()
+
+        for objectType, subs := range scannerClients </span><span class="cov8" title="1">{
+
+                for _, sub := range subs </span><span class="cov8" title="1">{
+
+                        var result any
+                        var err error
+
+                        switch objectType </span>{
+                        case "delivery":<span class="cov8" title="1">
+                                result, err = h.deliveryListStore.ProcessScannerEvent(sub.ObjectID, evt, sub.WorkerID)</span>
+
+                        case "shipment":<span class="cov0" title="0">
+                                result, err = h.shipmentListStore.ProcessScannerEvent(sub.ObjectID, evt, sub.WorkerID)</span>
+                        }
+
+                        <span class="cov8" title="1">if err != nil </span><span class="cov8" title="1">{
+                                fmt.Println(err)
+                                errorPayload, _ := json.Marshal(map[string]string{
+                                        "error": err.Error(),
+                                })
+                                _ = sub.Conn.WriteMessage(websocket.TextMessage, errorPayload)
+                                continue</span>
+                        }
+
+                        <span class="cov0" title="0">payload, _ := json.Marshal(result)
+
+                        _ = sub.Conn.WriteMessage(websocket.TextMessage, payload)</span>
+                }
+        }
+}
+</pre>
+		
+		<pre class="file" id="file36" style="display: none">package logic
+
+import (
+        "bufio"
+        "fmt"
+        "io"
+        "mime/multipart"
+)
+
+func FileHandler(file *multipart.File) error <span class="cov0" title="0">{
+        reader := bufio.NewReader(*file)
+        lineNum := 0
+
+        for </span><span class="cov0" title="0">{
+                line, err := reader.ReadString('\n')
+                if err == io.EOF </span><span class="cov0" title="0">{
+                        break</span>
+                }
+                <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov0" title="0">lineNum++
+                fmt.Printf("Строка %d: %s", lineNum, line)</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file37" style="display: none">package minio
+
+import (
+        "context"
+        "storeSystem/internal/config"
+        "storeSystem/internal/helpers"
+
+        "github.com/minio/minio-go/v7"
+        "github.com/minio/minio-go/v7/pkg/credentials"
+)
+
+// Client интерфейс для взаимодействия с Minio
+type Client interface {
+        InitMinio() error
+        CreateOne(file helpers.FileDataType) (*helpers.UploadedFile, error)
+        GetOne(objectID string) (string, error)
+}
+
+// minioClient реализация интерфейса MinioClient
+type minioClient struct {
+        mc *minio.Client
+}
+
+func NewMinioClient() Client <span class="cov0" title="0">{
+        return &amp;minioClient{}
+}</span>
+
+func (m *minioClient) InitMinio() error <span class="cov0" title="0">{
+        ctx := context.Background()
+
+        client, err := minio.New(config.AppConfig.MinioEndpoint, &amp;minio.Options{
+                Creds:  credentials.NewStaticV4(config.AppConfig.MinioRootUser, config.AppConfig.MinioRootPassword, ""),
+                Secure: config.AppConfig.MinioUseSSL,
+        })
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">m.mc = client
+
+        exists, err := m.mc.BucketExists(ctx, config.AppConfig.BucketName)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">if !exists </span><span class="cov0" title="0">{
+                err := m.mc.MakeBucket(ctx, config.AppConfig.BucketName, minio.MakeBucketOptions{})
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file38" style="display: none">package minio
+
+import (
+        "bytes"
+        "context"
+        "fmt"
+        "storeSystem/internal/config"
+        "storeSystem/internal/helpers"
+        "time"
+
+        "github.com/google/uuid"
+        "github.com/minio/minio-go/v7"
+)
+
+func (m *minioClient) CreateOne(file helpers.FileDataType) (*helpers.UploadedFile, error) <span class="cov0" title="0">{
+        objectID := uuid.New().String() + file.FileName
+
+        reader := bytes.NewReader(file.Data)
+
+        _, err := m.mc.PutObject(
+                context.Background(),
+                config.AppConfig.BucketName,
+                objectID,
+                reader,
+                int64(len(file.Data)),
+                minio.PutObjectOptions{ContentType: "text/csv"},
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">url, err := m.mc.PresignedGetObject(
+                context.Background(),
+                config.AppConfig.BucketName,
+                objectID,
+                time.Hour*24,
+                nil,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;helpers.UploadedFile{
+                ObjectID: objectID,
+                Link:     url.String(),
+        }, nil</span>
+}
+
+func (m *minioClient) GetOne(objectID string) (string, error) <span class="cov0" title="0">{
+        // Получение предварительно подписанного URL для доступа к объекту Minio.
+        url, err := m.mc.PresignedGetObject(context.Background(), config.AppConfig.BucketName, objectID, time.Second*24*60*60, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("ошибка при получении URL для объекта %s: %v", objectID, err)
+        }</span>
+
+        <span class="cov0" title="0">return url.String(), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file39" style="display: none">package validation
+
+import "github.com/go-playground/validator/v10"
+
+var Validate *validator.Validate
+
+func init() <span class="cov0" title="0">{
+        Validate = validator.New()
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
